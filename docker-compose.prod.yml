@@ -1,0 +1,42 @@
+services:
+  admin-web:
+    image: ${DOCKER_IMAGE:-huyonthecloud/knowledge-app:latest}
+    container_name: knowledge-admin
+    command: python run_admin_web.py
+    ports:
+      - "7860:7860"
+    volumes:
+      - ./data:/app/data
+      - ./UI:/app/UI
+      - ./.env:/app/.env
+    environment:
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  user-web:
+    image: ${DOCKER_IMAGE:-huyonthecloud/knowledge-app:latest}
+    container_name: knowledge-user
+    command: python run_user_web.py
+    ports:
+      - "7861:7861"
+    volumes:
+      - ./data:/app/data
+      - ./UI:/app/UI
+      - ./.env:/app/.env
+    environment:
+      - PYTHONUNBUFFERED=1
+    depends_on:
+      - admin-web
+    restart: unless-stopped
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  data:
+    driver: local

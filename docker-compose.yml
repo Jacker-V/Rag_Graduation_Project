@@ -1,0 +1,73 @@
+services:
+  admin-web:
+    container_name: knowledge-admin
+    image: knowledge-app:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: python run_admin_web.py
+    ports:
+      - "7860:7860"
+    volumes:
+      - ./data:/app/data
+      - ./UI:/app/UI
+      - ./.env:/app/.env
+    environment:
+      - PYTHONUNBUFFERED=1
+      - HF_HOME=/app/data/huggingface
+      - LLM_PROVIDER=${LLM_PROVIDER:-github}
+      - INTERNAL_SERVICE_TOKEN=${INTERNAL_SERVICE_TOKEN:-dev-internal-token}
+      - USER_API_BASE_URL=${USER_API_BASE_URL:-http://knowledge-user:7861}
+      - LLM_MAX_CONCURRENT_REQUESTS=${LLM_MAX_CONCURRENT_REQUESTS:-2}
+      - LLM_MAX_RETRIES=${LLM_MAX_RETRIES:-3}
+      - LLM_RETRY_BASE_SECONDS=${LLM_RETRY_BASE_SECONDS:-1}
+      - LLM_RETRY_MAX_SECONDS=${LLM_RETRY_MAX_SECONDS:-10}
+    restart: unless-stopped
+
+  user-web:
+    container_name: knowledge-user
+    image: knowledge-app:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: python run_user_web.py
+    ports:
+      - "7861:7861"
+    volumes:
+      - ./data:/app/data
+      - ./UI:/app/UI
+      - ./.env:/app/.env
+    environment:
+      - PYTHONUNBUFFERED=1
+      - HF_HOME=/app/data/huggingface
+      - LLM_PROVIDER=${LLM_PROVIDER:-github}
+      - INTERNAL_SERVICE_TOKEN=${INTERNAL_SERVICE_TOKEN:-dev-internal-token}
+      - MCP_URL=${MCP_URL:-http://knowledge-mcp:8000/mcp}
+      - LLM_MAX_CONCURRENT_REQUESTS=${LLM_MAX_CONCURRENT_REQUESTS:-2}
+      - LLM_MAX_RETRIES=${LLM_MAX_RETRIES:-3}
+      - LLM_RETRY_BASE_SECONDS=${LLM_RETRY_BASE_SECONDS:-1}
+      - LLM_RETRY_MAX_SECONDS=${LLM_RETRY_MAX_SECONDS:-10}
+    depends_on:
+      - admin-web
+    restart: unless-stopped
+
+  mcp-server:
+    container_name: knowledge-mcp
+    image: knowledge-app:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: python -m rag_chatbot.mcp_server
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+      - ./.env:/app/.env
+    environment:
+      - PYTHONUNBUFFERED=1
+      - INTERNAL_SERVICE_TOKEN=${INTERNAL_SERVICE_TOKEN:-dev-internal-token}
+      - USER_TOOL_BASE_URL=${USER_TOOL_BASE_URL:-http://knowledge-user:7861/api/internal/tools}
+      - MCP_AUDIT_LOG=${MCP_AUDIT_LOG:-/app/data/mcp_audit.log}
+    depends_on:
+      - user-web
+    restart: unless-stopped

@@ -1,0 +1,321 @@
+================================================================================
+                    BÁO CÁO CHI TIẾT CÁC TÍNH NĂNG MỚI
+                    Hệ thống Trợ lý Tri thức Nội bộ
+                    Ngày: 05/12/2025
+================================================================================
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. TÍNH NĂNG TECH NEWS - SẮP XẾP THEO ĐỘ HOT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1.1. MÔ TẢ TỔNG QUAN:
+---------------------
+Hệ thống tự động thu thập tin tức công nghệ/bảo mật từ các nguồn RSS feeds 
+và sắp xếp hiển thị theo độ "hot" (mức độ quan tâm của người dùng).
+
+1.2. CƠ CHẾ HOẠT ĐỘNG:
+----------------------
+
+a) Thu thập tin tức (News Scheduler):
+   - File: rag_chatbot/workers/news_scheduler.py
+   - Chạy tự động mỗi 6 giờ (interval_hours=6)
+   - Thu thập từ các nguồn RSS:
+     * The Hacker News (thehackernews.com)
+     * Krebs on Security
+     * Dark Reading
+     * Bleeping Computer
+     * Security Week
+     * Và nhiều nguồn khác...
+
+b) Lưu trữ vào Database:
+   - Bảng: tech_news
+   - Các trường quan trọng:
+     * id: ID duy nhất
+     * title: Tiêu đề bài viết
+     * link: URL gốc
+     * source: Nguồn tin (ví dụ: "The Hacker News")
+     * published_date: Ngày xuất bản
+     * view_count: SỐ LƯỢT XEM (dùng để tính độ hot)
+     * created_at: Thời gian lưu vào hệ thống
+
+c) Tracking lượt xem:
+   - Khi user click vào một bài tin → gọi API: POST /api/tech-news/{id}/view
+   - Backend tăng view_count lên 1
+   - Code trong run_user_web.py:
+     ```python
+     @app.route('/api/tech-news/<int:article_id>/view', methods=['POST'])
+     def track_news_view(article_id):
+         cursor.execute("""
+             UPDATE tech_news SET view_count = view_count + 1 WHERE id = ?
+         """, (article_id,))
+     ```
+
+d) Sắp xếp theo độ hot:
+   - Query lấy tin tức: ORDER BY view_count DESC, published_date DESC
+   - Nghĩa là: Ưu tiên tin có nhiều lượt xem nhất, sau đó mới đến tin mới nhất
+   - Code:
+     ```python
+     cursor.execute("""
+         SELECT * FROM tech_news 
+         WHERE published_date >= date('now', '-7 days')
+         ORDER BY view_count DESC, published_date DESC
+         LIMIT 50
+     """)
+     ```
+
+1.3. HIỂN THỊ TRÊN GIAO DIỆN:
+-----------------------------
+- Mỗi bài tin hiển thị: Tiêu đề + Nguồn + Số lượt xem "(X views)"
+- Tin có nhiều view nhất sẽ xuất hiện đầu tiên
+- User có thể click để đọc chi tiết → tự động tăng view_count
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2. TÍNH NĂNG FOLDER VÀ SẮP XẾP TÀI LIỆU THEO ĐỘ HOT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+2.1. MÔ TẢ TỔNG QUAN:
+---------------------
+Tài liệu được tổ chức theo thư mục (folders) và sắp xếp theo mức độ sử dụng.
+Có 2 loại tài liệu riêng biệt:
+- Tài liệu công ty (Company Documents): Admin upload, mọi người xem được
+- Tài liệu cá nhân (Personal Documents): User tự upload, chỉ mình xem được
+
+2.2. CẤU TRÚC DATABASE:
+-----------------------
+
+a) Bảng document_folders:
+   - folder_name: Tên thư mục (tiếng Việt)
+   - folder_icon: Icon Font Awesome
+   - display_order: Thứ tự hiển thị
+   - is_active: Trạng thái hoạt động
+
+b) 5 thư mục mặc định cho Company Documents:
+   1. Nhân sự & Chính sách (icon: users-cog)
+   2. Tài liệu Kỹ thuật (icon: code)
+   3. Tài liệu Đào tạo (icon: graduation-cap)
+   4. Tài chính & Ngân sách (icon: money-bill-wave)
+   5. Chung (icon: folder-open)
+
+c) Bảng document_usage (QUAN TRỌNG - dùng để tính độ hot):
+   - document_id: ID tài liệu
+   - document_type: 'company' hoặc 'personal'
+   - user_id: ID người dùng
+   - action_type: Loại hành động ('download', 'chat', 'view')
+   - created_at: Thời gian thực hiện
+
+d) Bảng documents (tài liệu công ty):
+   - Cột folder: Lưu tên thư mục chứa tài liệu
+
+e) Bảng user_documents (tài liệu cá nhân):
+   - Cột folder: Lưu tên thư mục do user tự tạo
+   - Cột uploaded_by: ID của user sở hữu
+
+2.3. CƠ CHẾ TRACKING USAGE:
+---------------------------
+
+a) Khi user DOWNLOAD tài liệu:
+   - API: GET /api/documents/download/{filename}
+   - Ghi vào document_usage với action_type='download'
+
+b) Khi user HỎI VỀ tài liệu trong CHAT:
+   - Khi chatbot trả lời và trích dẫn nguồn từ tài liệu
+   - Ghi vào document_usage với action_type='chat'
+   - Code:
+     ```python
+     def track_document_usage(document_id, document_type, user_id, action_type):
+         cursor.execute("""
+             INSERT INTO document_usage (document_id, document_type, user_id, action_type)
+             VALUES (?, ?, ?, ?)
+         """, (document_id, document_type, user_id, action_type))
+     ```
+
+2.4. SẮP XẾP THEO ĐỘ HOT:
+-------------------------
+- Query đếm số lần sử dụng và sắp xếp:
+  ```sql
+  SELECT d.*, COALESCE(usage.usage_count, 0) as usage_count
+  FROM documents d
+  LEFT JOIN (
+      SELECT document_id, COUNT(*) as usage_count
+      FROM document_usage
+      WHERE document_type = 'company'
+      GROUP BY document_id
+  ) usage ON d.id = usage.document_id
+  WHERE d.folder = ?
+  ORDER BY usage_count DESC, d.upload_date DESC
+  ```
+
+- Giải thích:
+  * LEFT JOIN với bảng usage để đếm số lần sử dụng
+  * ORDER BY usage_count DESC: Tài liệu dùng nhiều nhất lên đầu
+  * Sau đó mới đến upload_date DESC: Tài liệu mới hơn
+
+2.5. PHÂN TÁCH COMPANY VS PERSONAL:
+-----------------------------------
+
+a) Company Documents:
+   - Lưu trong bảng: documents
+   - Upload bởi: Admin
+   - Hiển thị: Cho tất cả user
+   - Thư mục: 5 thư mục cố định tiếng Việt
+   - API: /api/documents/folders, /api/documents/by-folder/{name}
+
+b) Personal Documents:
+   - Lưu trong bảng: user_documents
+   - Upload bởi: User
+   - Hiển thị: Chỉ user đó xem được (WHERE uploaded_by = user_id)
+   - Thư mục: User tự tạo khi upload
+   - API: /api/user-documents/folders, /api/user-documents/by-folder/{name}
+   - KHÔNG cần admin approval - sẵn sàng ngay sau khi upload
+
+2.6. HIỂN THỊ TRÊN GIAO DIỆN:
+-----------------------------
+- Mỗi tài liệu hiển thị: Tên file + "🔥 X lượt sử dụng"
+- Tài liệu được dùng nhiều nhất (hot nhất) xuất hiện đầu tiên trong thư mục
+- Giao diện folder dạng lưới (grid), click vào folder để xem danh sách tài liệu
+- Nút "Quay lại" để trở về danh sách thư mục
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3. TÍNH NĂNG SUMMARY MESSAGE KHI USER VÀO WEB
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+3.1. MÔ TẢ TỔNG QUAN:
+---------------------
+Khi user đăng nhập và vào trang chat, hệ thống tự động tạo một tin nhắn 
+tóm tắt (Summary Message) hiển thị:
+- Lời chào cá nhân hóa
+- Tin tức nổi bật nhất (hot news)
+- Tài liệu mới được upload
+- Thống kê tổng quan
+
+3.2. CƠ CHẾ HOẠT ĐỘNG:
+----------------------
+
+a) Khi trang load xong, gọi API:
+   - Frontend: loadWelcomeSummary() trong UI/src/user/main.js
+   - API: GET /api/welcome-summary
+   - Chạy ngay sau khi DOMContentLoaded
+
+b) Backend xử lý (run_user_web.py):
+   ```python
+   @app.route('/api/welcome-summary', methods=['GET'])
+   def get_welcome_summary():
+       # 1. Lấy 3 tin tức hot nhất (nhiều view nhất trong 7 ngày)
+       cursor.execute("""
+           SELECT id, title, link, source, view_count
+           FROM tech_news
+           WHERE published_date >= date('now', '-7 days')
+           ORDER BY view_count DESC
+           LIMIT 3
+       """)
+       hot_news = cursor.fetchall()
+       
+       # 2. Lấy 3 tài liệu mới nhất (upload trong 7 ngày)
+       cursor.execute("""
+           SELECT id, original_filename, upload_date, metadata
+           FROM documents
+           WHERE upload_date >= datetime('now', '-7 days')
+           ORDER BY upload_date DESC
+           LIMIT 3
+       """)
+       new_docs = cursor.fetchall()
+       
+       # 3. Tạo summary text bằng AI (LLM)
+       summary_prompt = f"""
+       Tạo lời chào ngắn gọn cho user dựa trên:
+       - {len(hot_news)} tin tức nổi bật về: {news_titles}
+       - {len(new_docs)} tài liệu mới
+       Viết 1-2 câu tiếng Việt, thân thiện, chuyên nghiệp.
+       """
+       summary_text = pipeline.chat(summary_prompt)
+       
+       # 4. Trả về JSON
+       return jsonify({
+           'summary': summary_text,
+           'hot_news': hot_news_list,
+           'new_docs': new_docs_list,
+           'stats': {
+               'hot_news_count': len(hot_news),
+               'new_docs_count': len(new_docs),
+               'pending_uploads': pending_count
+           }
+       })
+   ```
+
+c) Frontend hiển thị:
+   - Tạo HTML element với class "system-message"
+   - Hiển thị avatar (icon sparkles)
+   - Header: "Tóm tắt Hệ thống"
+   - Body: Nội dung summary + danh sách tin nổi bật + tài liệu mới
+   - Footer: Thống kê (X tin nổi bật, Y tài liệu mới)
+
+3.3. NỘI DUNG SUMMARY MESSAGE:
+------------------------------
+
+a) Lời chào (AI-generated):
+   Ví dụ: "Chào mừng bạn trở lại! Tuần này, hãy khám phá bản tin bảo mật 
+   với các CVE nóng, sự trở lại của npm Worm và vụ tấn công email M365. 
+   Đừng quên xem tài liệu mới được thêm để cập nhật thông tin hữu ích!"
+
+b) Tin nổi bật (🔥 Tin nổi bật):
+   - Hiển thị 3 tin có view_count cao nhất
+   - Mỗi tin: Tiêu đề + link + "(X views)"
+   - Click để mở tab mới và tự động tăng view_count
+
+c) Tài liệu mới (📄 Tài liệu mới):
+   - Hiển thị 3 tài liệu upload gần nhất
+   - Mỗi tài liệu: Tên file + ngày upload
+   - Click để scroll đến tài liệu đó
+
+d) Thống kê:
+   - "X tin nổi bật" 
+   - "Y tài liệu mới"
+   - "Z đang chờ" (nếu có upload pending)
+
+3.4. STYLING (CSS):
+-------------------
+- Class: .system-message, .system-content, .system-header, .system-body
+- Background: #fdfdff (trắng nhẹ)
+- Border: 1px solid rgba(82, 99, 255, 0.08)
+- Avatar: Gradient xanh với icon sparkles
+- Max-width: fit-content (co lại vừa với nội dung)
+- Font-size: 12px cho body, 10-11px cho các phần phụ
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4. TÓM TẮT KIẾN TRÚC HỆ THỐNG
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+4.1. BACKEND:
+- Framework: Flask (Python)
+- Database: SQLite
+- AI/LLM: Ollama + LlamaIndex (RAG pipeline)
+- Scheduler: APScheduler (cho news fetching)
+
+4.2. FRONTEND:
+- HTML/CSS/JavaScript thuần
+- Font Awesome icons
+- Responsive design
+
+4.3. CÁC BẢNG DATABASE QUAN TRỌNG:
+- tech_news: Lưu tin tức + view_count
+- documents: Tài liệu công ty + folder
+- user_documents: Tài liệu cá nhân + folder
+- document_folders: Danh sách thư mục
+- document_usage: Tracking sử dụng tài liệu
+- users: Thông tin người dùng
+
+4.4. LUỒNG DỮ LIỆU:
+1. News Scheduler → RSS Feeds → tech_news table
+2. User click news → view_count++ → Sắp xếp theo hot
+3. Admin upload → documents table → Folder assignment
+4. User upload → user_documents table → Personal folder
+5. User download/chat → document_usage → Sắp xếp theo hot
+6. User login → API welcome-summary → AI generate → Display
+
+
+================================================================================
+                              HẾT BÁO CÁO
+================================================================================

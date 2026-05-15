@@ -1,0 +1,722 @@
+[
+  {
+    "question": "Công ty IVS có cho phép nhân viên làm việc tại nhà không?",
+    "answer": "Có, công ty IVS có chính sách Làm việc tại nhà (WFH) để mang lại lợi ích cho cả nhân viên và tổ chức.",
+    "contexts": [
+      "Chính sách này thiết lập các hướng dẫn cho nhân viên làm việc tại nhà trong khi đảm bảo năng suất, bảo mật và giao tiếp hiệu quả."
+    ],
+    "ground_truth": "Công ty IVS có chính sách WFH"
+  },
+  {
+    "question": "Mục tiêu chính của chính sách làm việc tại nhà của IVS là gì?",
+    "answer": "Mục tiêu là duy trì năng suất cao, đảm bảo bảo mật dữ liệu, cung cấp hướng dẫn rõ ràng, hỗ trợ phúc lợi nhân viên, và duy trì tính liên tục kinh doanh.",
+    "contexts": [
+      "Duy trì mức độ năng suất và chất lượng dịch vụ cao, Đảm bảo xử lý an toàn thông tin"
+    ],
+    "ground_truth": "Mục tiêu là năng suất, bảo mật, hướng dẫn, phúc lợi và liên tục kinh doanh"
+  },
+  {
+    "question": "Nhân viên mới ở IVS cần bao lâu để đủ điều kiện làm việc tại nhà?",
+    "answer": "Nhân viên phải hoàn thành ít nhất 6 tháng làm việc tại IVS và nhận được ít nhất một đánh giá hiệu suất.",
+    "contexts": [
+      "Phải hoàn thành ít nhất 6 tháng làm việc tại IVS, Phải nhận được ít nhất một đánh giá hiệu suất"
+    ],
+    "ground_truth": "6 tháng và đánh giá hiệu suất"
+  },
+  {
+    "question": "Những vai trò nào KHÔNG được phép làm việc tại nhà ở IVS?",
+    "answer": "Nhân viên tiếp tân, kỹ thuật viên IT, quản lý cơ sở, bảo vệ, và các vai trò yêu cầu vận hành thiết bị vật lý hoặc tương tác khách hàng trực tiếp không được phép WFH.",
+    "contexts": [
+      "Nhân viên tiếp tân và quầy lễ tân, Kỹ thuật viên hỗ trợ CNTT tại chỗ, Các vị trí yêu cầu vận hành thiết bị vật lý"
+    ],
+    "ground_truth": "Tiếp tân, IT, quản lý cơ sở, bảo vệ, thiết bị vật lý"
+  },
+  {
+    "question": "Quy trình đăng ký WFH có bao nhiêu bước?",
+    "answer": "Quy trình WFH có 4 bước: thảo luận ban đầu, đơn đăng ký chính thức, đánh giá văn phòng tại nhà, và quy trình phê duyệt.",
+    "contexts": [
+      "Bước 1: Thảo luận ban đầu, Bước 2: Đơn đăng ký chính thức, Bước 3: Đánh giá văn phòng tại nhà, Bước 4: Quy trình phê duyệt"
+    ],
+    "ground_truth": "4 bước"
+  },
+  {
+    "question": "Nhân viên cần gửi đơn yêu cầu WFH bao lâu trước ngày bắt đầu mong muốn?",
+    "answer": "Nhân viên phải gửi đơn yêu cầu WFH ít nhất 2 tuần trước ngày bắt đầu mong muốn.",
+    "contexts": [
+      "Gửi cho người giám sát ít nhất 2 tuần trước ngày bắt đầu mong muốn"
+    ],
+    "ground_truth": "2 tuần"
+  },
+  {
+    "question": "Thời gian thử nghiệm cho sắp xếp WFH mới là bao lâu?",
+    "answer": "Tất cả sắp xếp WFH mới bao gồm thời gian thử nghiệm 90 ngày trong đó hiệu suất được theo dõi chặt chẽ.",
+    "contexts": [
+      "Tất cả các sắp xếp WFH mới bao gồm thời gian thử nghiệm 90 ngày"
+    ],
+    "ground_truth": "90 ngày"
+  },
+  {
+    "question": "Nhân viên WFH tạm thời cần gửi đơn đăng ký chính thức không?",
+    "answer": "Không, đối với WFH ngắn hạn (ít hơn 5 ngày liên tiếp), nhân viên chỉ cần gửi email yêu cầu cho người giám sát, không cần đơn đăng ký chính thức.",
+    "contexts": [
+      "Gửi email yêu cầu cho người giám sát với lý do, Không yêu cầu đơn đăng ký chính thức"
+    ],
+    "ground_truth": "Không cần, chỉ email yêu cầu"
+  },
+  {
+    "question": "Giờ làm việc cốt lõi của nhân viên WFH là bao nhiêu?",
+    "answer": "Giờ làm việc cốt lõi là Thứ Hai đến Thứ Sáu từ 9:00 AM đến 5:00 PM theo giờ địa phương.",
+    "contexts": [
+      "Thứ Hai đến Thứ Sáu: 9:00 SA - 5:00 CH"
+    ],
+    "ground_truth": "9:00 AM - 5:00 PM, Thứ 2 - Thứ 6"
+  },
+  {
+    "question": "Nhân viên WFH cần trả lời email trong bao lâu?",
+    "answer": "Nhân viên WFH phải trả lời email trong vòng 2 giờ trong giờ làm việc cốt lõi.",
+    "contexts": [
+      "Phải trả lời email trong vòng 2 giờ trong giờ cốt lõi"
+    ],
+    "ground_truth": "2 giờ"
+  },
+  {
+    "question": "Nhân viên WFH phải duy trì tối thiểu bao nhiêu giờ mỗi ngày?",
+    "answer": "Nhân viên WFH phải duy trì tối thiểu 8 giờ làm việc mỗi ngày.",
+    "contexts": [
+      "Phải duy trì tối thiểu 8 giờ mỗi ngày"
+    ],
+    "ground_truth": "8 giờ"
+  },
+  {
+    "question": "Nhân viên WFH được phép có bao nhiêu thời gian nghỉ?",
+    "answer": "Nhân viên WFH được phép một giờ nghỉ trưa không lương và hai lần nghỉ 15 phút có lương.",
+    "contexts": [
+      "Một giờ nghỉ trưa (không lương), Hai lần nghỉ 15 phút (có lương)"
+    ],
+    "ground_truth": "1 giờ trưa, 2 lần 15 phút"
+  },
+  {
+    "question": "Thiết bị nào là bắt buộc phải có để làm việc tại nhà ở IVS?",
+    "answer": "IVS sẽ cung cấp máy tính xách tay với phần mềm cần thiết, VPN, tai nghe video, màn hình bổ sung (nếu cần), bàn phím và chuột.",
+    "contexts": [
+      "Máy tính xách tay với phần mềm cần thiết, Thông tin đăng nhập truy cập VPN, Tai nghe cho hội nghị video"
+    ],
+    "ground_truth": "Laptop, VPN, tai nghe, màn hình, bàn phím, chuột"
+  },
+  {
+    "question": "Tốc độ internet tối thiểu cần thiết để làm việc tại nhà là bao nhiêu?",
+    "answer": "Tốc độ internet tối thiểu là 25 Mbps tải xuống và 5 Mbps tải lên.",
+    "contexts": [
+      "Tốc độ Internet: Tối thiểu 25 Mbps tải xuống, 5 Mbps tải lên"
+    ],
+    "ground_truth": "25 Mbps xuống, 5 Mbps lên"
+  },
+  {
+    "question": "Nhân viên WFH có thể sử dụng WiFi công cộng không?",
+    "answer": "Nhân viên không được phép truy cập dữ liệu công ty trên WiFi công cộng mà không có VPN.",
+    "contexts": [
+      "Không bao giờ truy cập dữ liệu công ty trên WiFi công cộng mà không có VPN"
+    ],
+    "ground_truth": "Không, phải dùng VPN"
+  },
+  {
+    "question": "Phần mềm nào là bắt buộc để làm việc tại nhà ở IVS?",
+    "answer": "Phần mềm bắt buộc bao gồm Microsoft Office 365, ứng dụng VPN, Microsoft Teams, phần mềm theo dõi thời gian, và phần mềm bảo mật.",
+    "contexts": [
+      "Bộ Microsoft Office 365, Ứng dụng khách VPN của công ty, Microsoft Teams để giao tiếp, Phần mềm theo dõi thời gian"
+    ],
+    "ground_truth": "Office 365, VPN, Teams, tracking, bảo mật"
+  },
+  {
+    "question": "Hỗ trợ IT có sẵn vào những giờ nào cho nhân viên WFH?",
+    "answer": "Hỗ trợ IT có sẵn Thứ Hai-Thứ Sáu từ 8:00 AM đến 6:00 PM, với hỗ trợ khẩn cấp 24/7.",
+    "contexts": [
+      "Giờ bàn trợ giúp: Thứ Hai-Thứ Sáu, 8:00 SA - 6:00 CH, Hỗ trợ khẩn cấp có sẵn 24/7"
+    ],
+    "ground_truth": "8 AM - 6 PM weekdays, 24/7 emergency"
+  },
+  {
+    "question": "Phần mềm bảo vệ nào cần phải cài đặt trên thiết bị WFH?",
+    "answer": "Nhân viên phải cài đặt antivirus, tường lửa, và các công cụ bảo mật được công ty phê duyệt.",
+    "contexts": [
+      "Phần mềm bảo mật (antivirus, tường lửa)"
+    ],
+    "ground_truth": "Antivirus, firewall"
+  },
+  {
+    "question": "Mật khẩu phải được thay đổi bao lâu một lần?",
+    "answer": "Mật khẩu phải được thay đổi mỗi 90 ngày.",
+    "contexts": [
+      "Thay đổi mật khẩu mỗi 90 ngày"
+    ],
+    "ground_truth": "90 ngày"
+  },
+  {
+    "question": "Nhân viên WFH phải bật mã hóa trên thiết bị không?",
+    "answer": "Có, nhân viên phải bật mã hóa đĩa đầy đủ trên tất cả thiết bị.",
+    "contexts": [
+      "Bật mã hóa đĩa đầy đủ trên tất cả thiết bị"
+    ],
+    "ground_truth": "Có, mã hóa đĩa đầy đủ"
+  },
+  {
+    "question": "Thời gian chờ khóa màn hình tự động nên là bao lâu?",
+    "answer": "Thời gian chờ khóa màn hình tự động nên là 5 phút.",
+    "contexts": [
+      "Sử dụng khóa màn hình với thời gian chờ tự động (5 phút)"
+    ],
+    "ground_truth": "5 phút"
+  },
+  {
+    "question": "Nhân viên WFH được phép chia sẻ mật khẩu với ai?",
+    "answer": "Nhân viên không được phép chia sẻ mật khẩu với bất kỳ ai, ngay cả với người giám sát hoặc đồng nghiệp.",
+    "contexts": [
+      "Không bao giờ chia sẻ mật khẩu với bất kỳ ai"
+    ],
+    "ground_truth": "Không được phép"
+  },
+  {
+    "question": "Dữ liệu nhạy cảm phải được lưu trữ ở đâu?",
+    "answer": "Dữ liệu nhạy cảm phải được lưu trữ trên máy chủ an toàn của công ty, không được lưu vào thiết bị cá nhân.",
+    "contexts": [
+      "Lưu trữ tất cả tài liệu trên máy chủ an toàn của công ty, Không bao giờ lưu dữ liệu nhạy cảm vào thiết bị cá nhân"
+    ],
+    "ground_truth": "Máy chủ an toàn công ty"
+  },
+  {
+    "question": "Nhân viên WFH phải báo cáo sự cố bảo mật như thế nào?",
+    "answer": "Báo cáo ngay lập tức các sự cố bảo mật bao gồm thiết bị bị mất, nghi ngờ vi phạm dữ liệu, lừa đảo, hoặc truy cập trái phép.",
+    "contexts": [
+      "Báo cáo ngay lập tức bất kỳ sự cố bảo mật nào"
+    ],
+    "ground_truth": "Báo cáo ngay lập tức"
+  },
+  {
+    "question": "Email báo cáo bảo mật của IVS là gì?",
+    "answer": "Email báo cáo bảo mật là security@ivscorp.com",
+    "contexts": [
+      "Liên hệ: security@ivscorp.com hoặc Bàn trợ giúp CNTT tại số nội bộ 5555"
+    ],
+    "ground_truth": "security@ivscorp.com"
+  },
+  {
+    "question": "Không gian làm việc tại nhà có cần khóa cửa không?",
+    "answer": "Có, nhân viên phải khóa cửa văn phòng khi ra khỏi không gian làm việc.",
+    "contexts": [
+      "Khóa cửa văn phòng khi ra khỏi không gian làm việc"
+    ],
+    "ground_truth": "Có, cần khóa"
+  },
+  {
+    "question": "Màn hình nên được đặt ở đâu để đảm bảo bảo mật?",
+    "answer": "Màn hình nên được đặt xa khỏi cửa sổ để tránh người ngoài có thể nhìn thấy thông tin nhạy cảm.",
+    "contexts": [
+      "Đặt màn hình xa cửa sổ"
+    ],
+    "ground_truth": "Xa khỏi cửa sổ"
+  },
+  {
+    "question": "Nhân viên WFH có thể thảo luận về các vấn đề bí mật ở nơi công cộng không?",
+    "answer": "Không, nhân viên không được thảo luận về các vấn đề bí mật ở nơi công cộng.",
+    "contexts": [
+      "Không bao giờ thảo luận về các vấn đề bí mật ở nơi công cộng"
+    ],
+    "ground_truth": "Không được"
+  },
+  {
+    "question": "Khi nào nhân viên nên sử dụng tai nghe chống ồn?",
+    "answer": "Nhân viên nên sử dụng tai nghe chống ồn cho các cuộc gọi nhạy cảm để bảo vệ thông tin.",
+    "contexts": [
+      "Sử dụng tai nghe chống ồn cho các cuộc gọi nhạy cảm"
+    ],
+    "ground_truth": "Cho cuộc gọi nhạy cảm"
+  },
+  {
+    "question": "Tài liệu vật lý phải được bảo mật như thế nào?",
+    "answer": "Tài liệu vật lý phải được lưu trữ trong tủ khóa để bảo vệ thông tin bí mật.",
+    "contexts": [
+      "Bảo mật tài liệu vật lý trong tủ khóa"
+    ],
+    "ground_truth": "Tủ khóa"
+  },
+  {
+    "question": "Người giám sát nên được thông báo về các vấn đề bảo mật ngoài thời gian làm việc không?",
+    "answer": "Có, các vấn đề bảo mật nên được báo cáo ngay lập tức, kể cả ngoài giờ làm việc.",
+    "contexts": [
+      "Báo cáo ngay lập tức bất kỳ sự cố bảo mật nào"
+    ],
+    "ground_truth": "Có, ngay lập tức"
+  },
+  {
+    "question": "Sử dụng máy tính cá nhân cho công việc công ty được phép không?",
+    "answer": "Không, nhân viên không được sử dụng máy tính cá nhân cho công việc công ty mà không có sự phê duyệt đặc biệt.",
+    "contexts": [
+      "Không sử dụng thiết bị công ty cho mục đích cá nhân"
+    ],
+    "ground_truth": "Không được phép"
+  },
+  {
+    "question": "Nhân viên WFH được kỳ vọng duy trì cùng mức năng suất như ở văn phòng không?",
+    "answer": "Có, nhân viên WFH được kỳ vọng duy trì mức năng suất tương đương hoặc vượt quá công việc dựa trên văn phòng.",
+    "contexts": [
+      "Hoàn thành tất cả các nhiệm vụ được chỉ định theo thời hạn"
+    ],
+    "ground_truth": "Có, cùng mức"
+  },
+  {
+    "question": "Quản lý sẽ kiểm tra hiệu suất của nhân viên WFH bao lâu một lần?",
+    "answer": "Quản lý sẽ tiến hành kiểm tra một đối một ít nhất mỗi tuần.",
+    "contexts": [
+      "Kiểm tra một đối một thường xuyên (tối thiểu hàng tuần)"
+    ],
+    "ground_truth": "Tối thiểu hàng tuần"
+  },
+  {
+    "question": "Sắp xếp WFH có ảnh hưởng đến quy trình đánh giá hiệu suất không?",
+    "answer": "Không, trạng thái WFH không ảnh hưởng đến quy trình đánh giá, cùng tiêu chí và lịch trình được áp dụng.",
+    "contexts": [
+      "Cùng lịch trình đánh giá như nhân viên dựa trên văn phòng"
+    ],
+    "ground_truth": "Không ảnh hưởng"
+  },
+  {
+    "question": "Nếu hiệu suất giảm trong khi WFH, sẽ xảy ra điều gì?",
+    "answer": "Quản lý sẽ thảo luận mối quan tâm, tạo kế hoạch cải thiện, có thể yêu cầu trở lại văn phòng, và có thể thu hồi đặc quyền WFH.",
+    "contexts": [
+      "Quản lý sẽ thảo luận về mối quan tâm, Các vấn đề tiếp tục có thể dẫn đến thu hồi đặc quyền WFH"
+    ],
+    "ground_truth": "Thảo luận, kế hoạch cải thiện, có thể khôi phục"
+  },
+  {
+    "question": "Kiểm tra email ít nhất bao lâu một lần?",
+    "answer": "Nhân viên phải kiểm tra email ít nhất mỗi 2 giờ trong ngày làm việc.",
+    "contexts": [
+      "Kiểm tra email ít nhất mỗi 2 giờ trong ngày làm việc"
+    ],
+    "ground_truth": "2 giờ"
+  },
+  {
+    "question": "Phản hồi tin nhắn khẩn cấp cần được thực hiện trong bao lâu?",
+    "answer": "Phản hồi tin nhắn khẩn cấp phải được thực hiện trong vòng 1 giờ.",
+    "contexts": [
+      "Phản hồi tin nhắn khẩn cấp trong vòng 1 giờ"
+    ],
+    "ground_truth": "1 giờ"
+  },
+  {
+    "question": "Camera có bắt buộc phải bật trong tất cả các cuộc họp video không?",
+    "answer": "Có, camera phải bật cho tất cả các cuộc họp đã lên lịch, trừ khi có vấn đề kỹ thuật.",
+    "contexts": [
+      "Bật camera cho tất cả các cuộc họp đã lên lịch (trừ khi có vấn đề kỹ thuật)"
+    ],
+    "ground_truth": "Có, trừ vấn đề kỹ thuật"
+  },
+  {
+    "question": "Nền trong cuộc họp video phải thế nào?",
+    "answer": "Nền phải chuyên nghiệp, không được lộ thông tin cá nhân hoặc bí mật.",
+    "contexts": [
+      "Ngoại hình và nền chuyên nghiệp"
+    ],
+    "ground_truth": "Chuyên nghiệp"
+  },
+  {
+    "question": "Những kênh giao tiếp nào được phê duyệt ở IVS?",
+    "answer": "Kênh được phê duyệt bao gồm: Email, Microsoft Teams, cuộc gọi video, điện thoại, và công cụ quản lý dự án.",
+    "contexts": [
+      "Email: Thông tin chính thức, Microsoft Teams: Nhắn tin tức thời, Cuộc gọi video: Cuộc họp"
+    ],
+    "ground_truth": "Email, Teams, video, điện thoại, project tools"
+  },
+  {
+    "question": "Khi cần leo thang vấn đề khẩn cấp, bước đầu tiên là gì?",
+    "answer": "Bước đầu tiên là liên hệ với người giám sát trực tiếp qua điện thoại.",
+    "contexts": [
+      "Liên hệ với người giám sát trực tiếp qua điện thoại"
+    ],
+    "ground_truth": "Liên hệ quản lý trực tiếp"
+  },
+  {
+    "question": "Vị trí của bàn phím và chuột nên như thế nào để tránh chấn thương?",
+    "answer": "Bàn phím và chuột nên được đặt để giảm căng thẳng cổ tay, thường ở mức khuỷu tay khi ngồi.",
+    "contexts": [
+      "Bàn phím và chuột được đặt để giảm căng thẳng lặp đi lặp lại"
+    ],
+    "ground_truth": "Mức khuỷu tay"
+  },
+  {
+    "question": "Màn hình nên được đặt ở tầm mắt hay không?",
+    "answer": "Có, màn hình nên được đặt ở tầm mắt, cách cánh tay một khoảng nhất định để giảm căng thẳng mắt.",
+    "contexts": [
+      "Màn hình ở tầm mắt, cách cánh tay"
+    ],
+    "ground_truth": "Có, tầm mắt"
+  },
+  {
+    "question": "Ghế làm việc tại nhà nên có những tính năng nào?",
+    "answer": "Ghế nên điều chỉnh được chiều cao, có hỗ trợ thắt lưng, và thoải mái để sử dụng lâu dài.",
+    "contexts": [
+      "Ghế điều chỉnh được với hỗ trợ thắt lưng"
+    ],
+    "ground_truth": "Điều chỉnh được, hỗ trợ thắt lưng"
+  },
+  {
+    "question": "Nghỉ giải lao trong ngày làm việc có bắt buộc không?",
+    "answer": "Có, nhân viên phải có nghỉ giải lao thường xuyên để ngăn ngừa chấn thương căng thẳng lặp đi lặp lại.",
+    "contexts": [
+      "Nghỉ giải lao thường xuyên để ngăn ngừa chấn thương căng thẳng"
+    ],
+    "ground_truth": "Có, thường xuyên"
+  },
+  {
+    "question": "Những tiêu chuẩn an toàn nào cần phải đáp ứng ở văn phòng tại nhà?",
+    "answer": "Tiêu chuẩn bao gồm không gian rõ ràng, dây điện an toàn, máy dò khói, bình chữa cháy, và thông tin liên hệ khẩn cấp.",
+    "contexts": [
+      "Không gian làm việc rõ ràng không có nguy cơ vấp ngã, Hệ thống dây điện phù hợp"
+    ],
+    "ground_truth": "Rõ ràng, dây an toàn, khói, cháy, liên hệ khẩn cấp"
+  },
+  {
+    "question": "IVS có hỗ trợ về sức khỏe tâm thần cho nhân viên WFH không?",
+    "answer": "Có, IVS cung cấp Chương trình Hỗ trợ Nhân viên (EAP) và các hoạt động sức khỏe ảo.",
+    "contexts": [
+      "Truy cập Chương trình Hỗ trợ Nhân viên (EAP)"
+    ],
+    "ground_truth": "Có, EAP"
+  },
+  {
+    "question": "Chấn thương liên quan đến công việc tại nhà được bồi thường không?",
+    "answer": "Có, bồi thường công nhân áp dụng cho chấn thương WFH xảy ra trong giờ làm việc.",
+    "contexts": [
+      "Bồi thường công nhân áp dụng cho chấn thương WFH trong giờ làm việc"
+    ],
+    "ground_truth": "Có, bồi thường công nhân"
+  },
+  {
+    "question": "IVS hoàn trả bao nhiêu phần trăm chi phí internet?",
+    "answer": "IVS hoàn trả 50% hóa đơn internet hàng tháng, tối đa 50 đô la mỗi tháng.",
+    "contexts": [
+      "50% hóa đơn internet hàng tháng, Tối đa 50 đô la mỗi tháng"
+    ],
+    "ground_truth": "50%, tối đa $50"
+  },
+  {
+    "question": "Chi phí đồ dùng văn phòng được hoàn trả bao nhiêu?",
+    "answer": "Chi phí đồ dùng cơ bản được hoàn trả tối đa 25 đô la mỗi tháng.",
+    "contexts": [
+      "Tối đa 25 đô la mỗi tháng"
+    ],
+    "ground_truth": "Tối đa $25/tháng"
+  },
+  {
+    "question": "Thiết bị công thái học như bàn hoặc ghế được hoàn trả như thế nào?",
+    "answer": "Một lần hoàn trả lên đến 500 đô la cho bàn hoặc ghế, yêu cầu phê duyệt trước và báo giá.",
+    "contexts": [
+      "Bàn hoặc ghế (một lần, lên đến 500 đô la), Yêu cầu phê duyệt trước"
+    ],
+    "ground_truth": "Một lần, tối đa $500"
+  },
+  {
+    "question": "Thanh toán tiền thuê nhà có được hoàn trả không?",
+    "answer": "Không, thanh toán tiền thuê hoặc thế chấp không được hoàn trả.",
+    "contexts": [
+      "Thanh toán tiền thuê hoặc thế chấp"
+    ],
+    "ground_truth": "Không"
+  },
+  {
+    "question": "Chi phí tiện ích như điện có được hoàn trả không?",
+    "answer": "Không, chi phí tiện ích như điện, sưởi/làm mát không được hoàn trả.",
+    "contexts": [
+      "Chi phí tiện ích (điện, sưởi/làm mát)"
+    ],
+    "ground_truth": "Không"
+  },
+  {
+    "question": "Quy trình hoàn trả chi phí mất bao lâu?",
+    "answer": "Báo cáo chi phí phải được gửi trong vòng 30 ngày kể từ khi mua, và hoàn trả được xử lý với bảng lương tiếp theo.",
+    "contexts": [
+      "Gửi báo cáo chi phí trong vòng 30 ngày kể từ khi mua"
+    ],
+    "ground_truth": "30 ngày gửi, xử lý với bảng lương"
+  },
+  {
+    "question": "Nhân viên WFH cần phải lưu ý các vấn đề thuế nào?",
+    "answer": "Nhân viên chịu trách nhiệm hiểu ý nghĩa thuế của khấu trừ WFH, chi phí hoàn trả, và nên tư vấn với chuyên gia thuế.",
+    "contexts": [
+      "Nhân viên chịu trách nhiệm hiểu ý nghĩa thuế"
+    ],
+    "ground_truth": "Khấu trừ WFH, chi phí, tư vấn chuyên gia"
+  },
+  {
+    "question": "Vi phạm bảo mật nghiêm trọng sẽ dẫn đến hậu quả gì?",
+    "answer": "Vi phạm bảo mật nghiêm trọng có thể dẫn đến hành động kỷ luật, chấm dứt hợp đồng, hoặc hành động pháp lý.",
+    "contexts": [
+      "Hành động kỷ luật đến chấm dứt, Hành động pháp lý cho vi phạm bảo mật"
+    ],
+    "ground_truth": "Kỷ luật, chấm dứt, hành động pháp lý"
+  },
+  {
+    "question": "Chính sách WFH được xem xét bao lâu một lần?",
+    "answer": "Chính sách được xem xét hàng năm vào ngày 1 tháng 12.",
+    "contexts": [
+      "Chính sách này được xem xét hàng năm"
+    ],
+    "ground_truth": "Hàng năm"
+  },
+  {
+    "question": "WFH là quyền hay đặc quyền của nhân viên?",
+    "answer": "WFH là một đặc quyền, không phải quyền, và có thể được sửa đổi hoặc chấm dứt.",
+    "contexts": [
+      "Hiểu WFH là một đặc quyền, không phải quyền"
+    ],
+    "ground_truth": "Đặc quyền"
+  },
+  {
+    "question": "FPT Online cung cấp lương thứ 13 khi nào?",
+    "answer": "Lương thứ 13 được thưởng vào dịp thành lập Tập đoàn và Tết âm lịch.",
+    "contexts": [
+      "Lương tháng thứ 13 được thưởng vào dịp thành lập Tập đoàn và Tết âm lịch"
+    ],
+    "ground_truth": "Thành lập tập đoàn, Tết"
+  },
+  {
+    "question": "FPT Online có chính sách thăng tiến như thế nào?",
+    "answer": "FPT Online có chính sách quy hoạch cán bộ, luân chuyển lãnh đạo, và bổ nhiệm công bằng, minh bạch.",
+    "contexts": [
+      "Chính sách quy hoạch cán bộ, chính sách luân chuyển cán bộ lãnh đạo"
+    ],
+    "ground_truth": "Quy hoạch cán bộ, luân chuyển, bổ nhiệm công bằng"
+  },
+  {
+    "question": "FPT Online tổ chức bao nhiêu khóa đào tạo mỗi năm?",
+    "answer": "FPT Online tổ chức 43 khóa học mỗi năm với sự tham gia của 691 lượt nhân viên.",
+    "contexts": [
+      "Năm 2017, FPT Online đã tổ chức 43 khóa học"
+    ],
+    "ground_truth": "43 khóa"
+  },
+  {
+    "question": "Tỷ lệ đào tạo so với số nhân sự ở FPT Online là bao nhiêu?",
+    "answer": "Tỷ lệ đào tạo so với số nhân sự là 140%.",
+    "contexts": [
+      "Tỷ lệ đào tạo/ số nhân sự trung bình: 140%"
+    ],
+    "ground_truth": "140%"
+  },
+  {
+    "question": "FPT Online có những chương trình đào tạo nào?",
+    "answer": "Chương trình bao gồm: đào tạo tân binh, cán bộ công nghệ, kỹ năng chuyên môn, và lực lượng cán bộ kế cận.",
+    "contexts": [
+      "Đào tạo tân binh, Đào tạo cán bộ công nghệ, Đào tạo lực lượng cán bộ kế cận"
+    ],
+    "ground_truth": "Tân binh, công nghệ, chuyên môn, kế cận"
+  },
+  {
+    "question": "Chương trình Vicongdong.vn làm gì?",
+    "answer": "Vicongdong.vn kết nối tri thức cộng đồng để giải quyết các bài toán xã hội, trở thành mạng cộng đồng thiện nguyện lớn nhất Việt Nam.",
+    "contexts": [
+      "Kết nối tri thức cộng đồng để giải quyết các bài toán xã hội"
+    ],
+    "ground_truth": "Mạng thiện nguyện, giải quyết xã hội"
+  },
+  {
+    "question": "Ngày Vì Cộng Đồng là ngày nào?",
+    "answer": "Ngày Vì Cộng Đồng là ngày 13/3.",
+    "contexts": [
+      "Ngày Vì Cộng Đồng (13/3)"
+    ],
+    "ground_truth": "13/3"
+  },
+  {
+    "question": "Ngày Văn nghệ FPT là ngày nào?",
+    "answer": "Ngày Văn nghệ FPT là ngày 19/5.",
+    "contexts": [
+      "Ngày Văn nghệ FPT (19/5)"
+    ],
+    "ground_truth": "19/5"
+  },
+  {
+    "question": "Ngày thành lập FPT là ngày nào?",
+    "answer": "Ngày thành lập FPT là ngày 13/9.",
+    "contexts": [
+      "Ngày thành lập FPT (13/9)"
+    ],
+    "ground_truth": "13/9"
+  },
+  {
+    "question": "Hội làng FPT được tổ chức khi nào?",
+    "answer": "Hội làng FPT được tổ chức vào Tết Âm lịch hoặc 31/12 dương lịch.",
+    "contexts": [
+      "Hội làng FPT (Tết Âm lịch hoặc 31/12 dương lịch)"
+    ],
+    "ground_truth": "Tết âm lịch hoặc 31/12"
+  },
+  {
+    "question": "VnExpress có bao nhiêu người đọc trung bình theo tháng năm 2017?",
+    "answer": "VnExpress có 41,373 triệu người đọc trung bình theo tháng năm 2017.",
+    "contexts": [
+      "Năm 2017: có 41,373 triệu người đọc (user) trung bình theo tháng"
+    ],
+    "ground_truth": "41,373 triệu"
+  },
+  {
+    "question": "Bao nhiêu phần trăm người đọc VnExpress đến từ nước ngoài?",
+    "answer": "9,71% người đọc VnExpress đến từ nước ngoài.",
+    "contexts": [
+      "9,71% users từ nước ngoài theo số liệu của Google Analytics"
+    ],
+    "ground_truth": "9.71%"
+  },
+  {
+    "question": "Ngôi Sao.net nhắm tới độ tuổi nào?",
+    "answer": "Ngôi Sao.net nhắm tới độ tuổi 22-35, chủ yếu là nữ giới (75% độc giả).",
+    "contexts": [
+      "75% độc giả là nữ, từ độ tuổi 22-35"
+    ],
+    "ground_truth": "22-35, 75% nữ"
+  },
+  {
+    "question": "Sohoa.net có lễ trao giải nào quan trọng?",
+    "answer": "Sohoa.net có lễ trao giải Tech Awards, giải thưởng công nghệ uy tín số 1 Việt Nam, diễn ra vào tháng 1 hàng năm.",
+    "contexts": [
+      "Tech Awards, giải thưởng công nghệ uy tín số 1 Việt Nam, diễn ra vào tháng 1"
+    ],
+    "ground_truth": "Tech Awards, tháng 1"
+  },
+  {
+    "question": "iOne là trang web về cái gì?",
+    "answer": "iOne là trang tin của giới trẻ Việt Nam với các chủ đề về nhịp sống, thời trang, học đường, giới tính và showbiz.",
+    "contexts": [
+      "Trang tin của giới trẻ Việt Nam với các chủ đề về nhịp sống, thời trang"
+    ],
+    "ground_truth": "Giới trẻ, nhịp sống, thời trang"
+  },
+  {
+    "question": "eClick là gì?",
+    "answer": "eClick là hệ thống quảng cáo trực tuyến thông minh, sản phẩm chiến lược của FPT Online.",
+    "contexts": [
+      "eClick là sản phẩm chiến lực của FPT Online"
+    ],
+    "ground_truth": "Hệ thống quảng cáo thông minh"
+  },
+  {
+    "question": "Hệ thống xuất bản của VnExpress được đánh giá như thế nào?",
+    "answer": "Hệ thống xuất bản của VnExpress được đánh giá có công nghệ tiên tiến, hoạt động với độ ổn định cao, khả năng tùy biến linh hoạt.",
+    "contexts": [
+      "Công nghệ tiên tiến, hoạt động với độ ổn định cao, khả năng tùy biến linh hoạt"
+    ],
+    "ground_truth": "Tiên tiến, ổn định, tùy biến"
+  },
+  {
+    "question": "Ông Thang Đức Thắng tốt nghiệp khóa học nào?",
+    "answer": "Ông Thang Đức Thắng tốt nghiệp khoa Ngữ văn, Đại học Lomonosov, năm 1980.",
+    "contexts": [
+      "Tốt nghiệp khoa Ngữ văn, Đại học Lomonosov, năm 1980"
+    ],
+    "ground_truth": "Ngữ văn, Lomonosov, 1980"
+  },
+  {
+    "question": "Ông Thang Đức Thắng phòng được học vị gì?",
+    "answer": "Ông Thang Đức Thắng được phong học vị Phó tiến sĩ Báo chí tại Khoa Báo chí của Đại học Lomonosov, năm 1992.",
+    "contexts": [
+      "Phó tiến sĩ Báo chí tại Khoa Báo chí"
+    ],
+    "ground_truth": "Phó tiến sĩ Báo chí"
+  },
+  {
+    "question": "Bà Chu Thị Thanh Hà giữ chức vị gì trước khi là Phó Chủ tịch HĐQT?",
+    "answer": "Bà Chu Thị Thanh Hà giữ chức Phó Tổng Giám đốc Công ty FPT Telecom từ năm 2003.",
+    "contexts": [
+      "Phó Tổng Giám đốc Công ty FPT Telecom"
+    ],
+    "ground_truth": "Phó Tổng Giám đốc FPT Telecom"
+  },
+  {
+    "question": "Ông Nguyễn Thế Phương có công lao gì trong FPT?",
+    "answer": "Ông Nguyễn Thế Phương có công lao xây dựng hệ thống tài chính, kế toán FPT theo tiêu chuẩn quốc tế.",
+    "contexts": [
+      "Xây dựng hệ thống tài chính, kế toán FPT theo chuẩn quốc tế"
+    ],
+    "ground_truth": "Tài chính, kế toán quốc tế"
+  },
+  {
+    "question": "Đại hội đồng cổ đông FPT năm 2018 diễn ra vào ngày nào?",
+    "answer": "Đại hội diễn ra vào ngày 12/6/2018 lúc 14:00.",
+    "contexts": [
+      "14g Thứ ba 12/06/2018"
+    ],
+    "ground_truth": "12/6/2018, 14:00"
+  },
+  {
+    "question": "Đại hội đồng cổ đông FPT năm 2018 được tổ chức ở những địa điểm nào?",
+    "answer": "Được tổ chức tại Hà Nội (Tòa nhà FPT Cầu Giấy) và Hồ Chí Minh (Tòa nhà FPT Tân Thuận).",
+    "contexts": [
+      "Phòng họp Telepresence 3200, Tầng 13, Tòa nhà FPT Cầu Giấy"
+    ],
+    "ground_truth": "Hà Nội, Hồ Chí Minh"
+  },
+  {
+    "question": "Có bao nhiêu nội dung cần thông qua tại Đại hội 2018?",
+    "answer": "Có 8 nội dung cần thông qua tại Đại hội 2018.",
+    "contexts": [
+      "Nội dung 1 đến Nội dung 8"
+    ],
+    "ground_truth": "8 nội dung"
+  },
+  {
+    "question": "Báo cáo của Hội đồng Quản trị năm 2017 do ai trình bày?",
+    "answer": "Báo cáo của HĐQT năm 2017 được trình bày bởi Chủ tịch HĐQT.",
+    "contexts": [
+      "Báo cáo của HĐQT Năm 2017 - Chủ tịch HĐQT"
+    ],
+    "ground_truth": "Chủ tịch HĐQT"
+  },
+  {
+    "question": "Phương án phân phối lợi nhuận năm 2017 bao gồm những gì?",
+    "answer": "Phương án phân phối lợi nhuận bao gồm phương án trích quỹ khen thưởng phúc lợi năm 2017.",
+    "contexts": [
+      "Phương án phân phối lợi nhuận, phương án trích quỹ khen thưởng phúc lợi năm 2017"
+    ],
+    "ground_truth": "Phân phối lợi nhuận, quỹ khen thưởng"
+  },
+  {
+    "question": "Đề xuất lựa chọn công ty kiểm toán được thông qua vào năm nào?",
+    "answer": "Đề xuất lựa chọn công ty kiểm toán năm 2018 được thông qua tại Đại hội 2018.",
+    "contexts": [
+      "Thông qua đề xuất lựa chọn Công ty kiểm toán độc lập thực hiện kiểm toán 2018"
+    ],
+    "ground_truth": "2018"
+  },
+  {
+    "question": "VnExpress được thành lập khi nào?",
+    "answer": "VnExpress là báo điện tử được thành lập vào năm 2000, là đồng sáng lập của ông Thang Đức Thắng.",
+    "contexts": [
+      "Năm 2000 ông gia nhập FPT, là đồng sáng lập báo điện tử VnExpress"
+    ],
+    "ground_truth": "2000"
+  },
+  {
+    "question": "VnExpress là tờ báo tiếng Việt nào có nhiều người xem nhất?",
+    "answer": "VnExpress luôn là báo tiếng Việt có nhiều người xem nhất toàn cầu.",
+    "contexts": [
+      "VnExpress luôn là báo tiếng Việt có nhiều người xem nhất toàn cầu"
+    ],
+    "ground_truth": "Báo tiếng Việt xem nhiều nhất"
+  },
+  {
+    "question": "Phòng HR của IVS có số điện thoại nào?",
+    "answer": "Phòng HR có số điện thoại (555) 123-4567 ext. 2000.",
+    "contexts": [
+      "Điện thoại: (555) 123-4567 ext. 2000"
+    ],
+    "ground_truth": "(555) 123-4567 ext. 2000"
+  },
+  {
+    "question": "Email liên hệ HR của IVS là gì?",
+    "answer": "Email liên hệ HR là hr@ivscorp.com",
+    "contexts": [
+      "Email: hr@ivscorp.com"
+    ],
+    "ground_truth": "hr@ivscorp.com"
+  }
+]

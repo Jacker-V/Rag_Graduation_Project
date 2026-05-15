@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trợ lý Kỹ thuật - Hệ thống Tri thức</title>
+    <link rel="stylesheet" href="user_styles.css?v=20251203a">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <button class="sidebar-toggle" id="sidebarToggle" title="Ẩn/Hiện sidebar">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1><i class="fas fa-brain"></i> Trợ lý Kỹ thuật</h1>
+                <span class="role-badge" id="roleBadge">
+                    <i class="fas fa-briefcase"></i> <span id="userRole">Kỹ sư Bảo mật</span>
+                </span>
+            </div>
+            <div class="header-actions">
+                <div class="user-info" id="user-info">
+                    <span id="user-name">Người dùng</span>
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <button class="logout-btn" onclick="logout()" title="Đăng xuất">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </header>
+
+        <div class="main-layout">
+            <!-- Left Sidebar: Navigation & Docs -->
+            <aside class="left-sidebar">
+                <!-- Navigation Tabs -->
+                <div class="nav-tabs">
+                    <button class="nav-tab active" data-tab="documents">
+                        <i class="fas fa-folder-open"></i> Tài liệu
+                    </button>
+                    <button class="nav-tab" data-tab="pinned">
+                        <i class="fas fa-thumbtack"></i> Đã ghim
+                    </button>
+                    <button class="nav-tab" data-tab="upload">
+                        <i class="fas fa-cloud-upload-alt"></i> Tải lên
+                    </button>
+                </div>
+
+                <!-- Tab Content -->
+                <div class="tab-content active" id="documents-tab">
+                    <div class="document-section">
+                        <div class="section-heading">
+                            <h3><i class="fas fa-building"></i> Tài liệu Công ty</h3>
+                            <button class="section-refresh" data-target="company-docs" title="Tải lại tài liệu công ty">
+                                <i class="fas fa-sync-alt"></i>
+                            </button>
+                        </div>
+                        <div class="document-list" id="documentList">
+                            <div class="loading">Đang tải...</div>
+                        </div>
+                    </div>
+                    <div class="document-section">
+                        <div class="section-heading">
+                            <h3><i class="fas fa-users"></i> Tài liệu Cá nhân</h3>
+                            <button class="section-refresh" data-target="personal-docs" title="Tải lại tài liệu cá nhân">
+                                <i class="fas fa-sync-alt"></i>
+                            </button>
+                        </div>
+                        <div class="document-list" id="personalDocumentList">
+                            <div class="loading">Đang tải...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pinned Documents Tab -->
+                <div class="tab-content" id="pinned-tab">
+                    <div class="document-section">
+                        <div class="section-heading">
+                            <h3><i class="fas fa-thumbtack"></i> Tài liệu Đã ghim</h3>
+                            <button class="section-refresh" data-target="pinned-docs" title="Tải lại tài liệu đã ghim">
+                                <i class="fas fa-sync-alt"></i>
+                            </button>
+                        </div>
+                        <div class="document-list" id="pinnedDocumentList">
+                            <div class="loading">Đang tải...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="upload-tab">
+                    <div class="upload-section">
+                        <h3><i class="fas fa-cloud-upload-alt"></i> Tải lên Tài liệu Cá nhân</h3>
+                        <p class="upload-help">Tải lên tài liệu vào không gian làm việc cá nhân của bạn. Tài liệu sẽ khả dụng ngay lập tức.</p>
+
+                        <form id="uploadForm" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label for="uploadFolderSelect">
+                                    <i class="fas fa-folder"></i> Thư mục
+                                </label>
+                                <select id="uploadFolderSelect">
+                                    <!-- Folders will be loaded dynamically -->
+                                </select>
+                                <input 
+                                    type="text" 
+                                    id="newFolderInput" 
+                                    placeholder="Hoặc nhập tên thư mục mới..."
+                                    style="margin-top: 8px;"
+                                >
+                            </div>
+
+                            <div class="form-group">
+                                <label for="fileInput">
+                                    <i class="fas fa-file"></i> Chọn tập tin
+                                </label>
+                                <input type="file" id="fileInput" accept=".pdf,.docx,.txt,.md,.markdown" required>
+                                <small>Cho phép: PDF, DOCX, TXT, MD (Tối đa 10MB)</small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="descriptionInput">
+                                    <i class="fas fa-align-left"></i> Mô tả
+                                </label>
+                                <textarea id="descriptionInput" rows="4" placeholder="Mô tả nội dung tài liệu này..." required></textarea>
+                            </div>
+
+                            <button type="submit" class="btn-upload">
+                                <i class="fas fa-upload"></i> Tải lên Tài liệu
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Center: Chat Interface -->
+            <main class="chat-container">
+                <div class="chat-header">
+                    <div class="chat-title">
+                        <h2><i class="fas fa-robot"></i> Trợ lý AI</h2>
+                        <p>Câu trả lời đáng tin cậy từ cơ sở tri thức nội bộ</p>
+                    </div>
+                    <div class="chat-actions">
+                        <button class="clear-chat" id="clearChat">
+                            <i class="fas fa-trash"></i>
+                            <span>Xóa</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="chat-messages" id="chatMessages">
+                    <div class="welcome-message">
+                        <div class="ai-avatar"><i class="fas fa-robot"></i></div>
+                        <div class="message-content">
+                            <p> Xin chào! Tôi là trợ lý AI của bạn. Hỏi tôi về:</p>
+                            <ul>
+                                <li> Tài liệu công ty nội bộ</li>
+                                <li> Tin tức kỹ thuật mới nhất cho vai trò của bạn</li>
+                                <li> Kiến thức cá nhân</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="selected-docs-bar" id="selectedDocsBar" style="display: none;">
+                    <div class="selected-docs-label">
+                        <i class="fas fa-filter"></i>
+                        <span>Trả lời sử dụng tài liệu đã chọn:</span>
+                    </div>
+                    <div class="selected-docs-list" id="selectedDocsList"></div>
+                    <button class="clear-selected" id="clearSelectedDocs">
+                        <i class="fas fa-times"></i> Clear
+                    </button>
+                </div>
+
+                <div class="chat-input-container">
+                    <div class="chat-input-wrapper">
+                        <input type="text" id="chatInput" placeholder="Hỏi về tài liệu hoặc tin tức công nghệ..." maxlength="500">
+                        <button id="sendButton">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                    <div class="input-footer">
+                        <span class="character-count" id="charCount">0/500</span>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Right Sidebar: News Feed -->
+            <aside class="right-sidebar">
+                <div class="news-header">
+                    <div class="news-title">
+                        <h3><i class="fas fa-newspaper"></i> Tin Tức Kỹ thuật</h3>
+                        <span class="news-status" id="newsStatus">Trực tiếp</span>
+                    </div>
+                    <div class="news-controls">
+                        <button class="refresh-news" id="refreshNews" title="Làm mới tin tức">
+                            <i class="fas fa-sync-alt"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="news-filters">
+                    <select id="newsTimeFilter" class="news-filter">
+                        <option value="all">Tất cả</option>
+                        <option value="today">Hôm nay</option>
+                        <option value="week">Tuần này</option>
+                    </select>
+                    <select id="newsSortFilter" class="news-filter">
+                        <option value="date">Mới nhất</option>
+                        <option value="interaction">Nhiều tương tác</option>
+                    </select>
+                </div>
+
+                <div class="news-feed" id="newsFeed">
+                    <div class="loading">Đang tải tin tức...</div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <!-- Report Modal -->
+    <div class="modal" id="reportModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>📝 Báo cáo Vấn đề</h3>
+                <button class="modal-close" id="reportModalClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="reportQuestion">
+                <input type="hidden" id="reportAnswer">
+
+                <div class="form-group">
+                    <label>Loại vấn đề</label>
+                    <select id="reportType">
+                        <option value="incorrect">Thông tin không chính xác</option>
+                        <option value="missing">Thiếu thông tin</option>
+                        <option value="other">Khác</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Nhận xét</label>
+                    <textarea id="reportComment" rows="4" placeholder="Mô tả vấn đề..."></textarea>
+                </div>
+
+                <button class="btn-submit" id="submitReport">Gửi Báo cáo</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="src/user/main.js?v=20251203a"></script>
+</body>
+
+</html>

@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Internal Knowledge System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="admin_styles.css?v=3.2">
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <i class="fas fa-brain"></i>
+                <span>KNOWLEDGE SYSTEM</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <div class="nav-item active" data-page="dashboard">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </div>
+
+            <div class="nav-section-title">Interface</div>
+
+            <div class="nav-item" data-page="documents">
+                <i class="fas fa-file-alt"></i>
+                <span>Documents</span>
+            </div>
+
+            <div class="nav-item" data-page="reports">
+                <i class="fas fa-flag"></i>
+                <span>Reports</span>
+                <span class="badge" id="sidebar-badge">0</span>
+            </div>
+<div class="nav-section-title">System</div>
+
+<div class="nav-item" data-page="configuration">
+    <i class="fas fa-cog"></i>
+    <span>Configuration</span>
+</div>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="admin-profile">
+                <div class="admin-avatar">
+                    <i class="fas fa-user-shield"></i>
+                </div>
+                <div class="admin-info">
+                    <div class="admin-name" id="admin-username">Administrator</div>
+                    <div class="admin-role">Admin</div>
+                </div>
+                <button class="logout-btn" onclick="logout()" title="Logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Top Bar -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle sidebar">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 class="page-title" id="page-title">Dashboard</h1>
+            </div>
+            <div class="topbar-right">
+                <div class="notification-icon">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge" id="notification-badge">0</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Page Content -->
+        <div class="content-area">
+            <!-- Dashboard Page -->
+            <div class="page active" id="dashboard-page">
+                <div class="page-header">
+                    <h2>Dashboard</h2>
+                    <p class="page-subtitle">Overview of your system</p>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon blue">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-label">Total Documents</div>
+                            <div class="stat-value" id="dash-total-docs">0</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon green">
+                            <i class="fas fa-database"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-label">Total Storage</div>
+                            <div class="stat-value" id="dash-total-storage">0 MB</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon orange">
+                            <i class="fas fa-flag"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-label">Pending Reports</div>
+                            <div class="stat-value" id="dash-pending-reports">0</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon purple">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-label">Last Upload</div>
+                            <div class="stat-value" id="dash-last-upload">Never</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-history"></i> Recent Activity</h3>
+                    </div>
+                    <div class="card-body">
+                        <table class="activity-table" id="recent-activity-table">
+                            <thead>
+                                <tr>
+                                    <th>Activity</th>
+                                    <th>Description</th>
+                                    <th>Time</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recent-activity-list">
+                                <tr>
+                                    <td colspan="3" class="text-muted">Loading activity...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Documents Page -->
+            <div class="page" id="documents-page">
+                <div class="page-header">
+                    <h2>Document Management</h2>
+                    <p class="page-subtitle">Upload and manage your knowledge base documents</p>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon blue">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-label">Total Documents</div>
+                            <div class="stat-value" id="doc-total-docs">0</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon green">
+                            <i class="fas fa-database"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-label">Total Storage</div>
+                            <div class="stat-value" id="doc-total-storage">0 MB</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon purple">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-label">Last Upload</div>
+                            <div class="stat-value" id="doc-last-upload">Never</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab Navigation -->
+                <div class="tab-navigation">
+                    <button class="tab-btn active" data-tab="upload-tab">
+                        <i class="fas fa-upload"></i> Upload Documents
+                    </button>
+                    <button class="tab-btn" data-tab="folders-tab">
+                        <i class="fas fa-folder-open"></i> Folder Management
+                    </button>
+                    <button class="tab-btn" data-tab="documents-tab">
+                        <i class="fas fa-list"></i> Documents List
+                    </button>
+                    <button class="tab-btn" data-tab="doc-improve-tab">
+                        <i class="fas fa-lightbulb"></i> Document Improvement (MCP)
+                    </button>
+                </div>
+
+                <!-- Upload Tab -->
+                <div class="tab-content active" id="upload-tab">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-upload"></i> Upload Documents</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="folder-select"><i class="fas fa-folder"></i> Select Folder</label>
+                                <select id="folder-select" class="form-control">
+                                    <!-- Folders will be loaded dynamically -->
+                                </select>
+                                <input 
+                                    type="text" 
+                                    id="new-folder-input" 
+                                    class="form-control" 
+                                    placeholder="Or enter new folder name..." 
+                                    style="margin-top: 8px;"
+                                >
+                                <small style="color: #858796; display: block; margin-top: 4px;">Choose existing folder or create new one</small>
+                            </div>
+                            <div class="upload-area" id="upload-area">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <h4>Drag & Drop files here</h4>
+                                <p>or click to browse</p>
+                                <input type="file" id="file-input" multiple accept=".pdf,.txt,.doc,.docx" hidden>
+                                <button class="btn btn-primary" onclick="document.getElementById('file-input').click()">
+                                    <i class="fas fa-file-alt"></i> Select Files
+                                </button>
+                            </div>
+                            <div id="selected-files" class="selected-files"></div>
+                            <button id="upload-btn" class="btn btn-success" disabled>
+                                <i class="fas fa-upload"></i> Upload Selected Files
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Folders Tab -->
+                <div class="tab-content" id="folders-tab">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-folder-open"></i> Folder Management</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Folder Name</th>
+                                            <th>File Count</th>
+                                            <th class="actions-col">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="folders-table-body">
+                                        <tr>
+                                            <td colspan="4" class="text-center">Loading...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Document Improvement Tab -->
+                <div class="tab-content" id="doc-improve-tab">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-lightbulb"></i> Find missing parts & improvements</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="doc-improve-ref"><i class="fas fa-hashtag"></i> Document reference</label>
+                                <input type="text" id="doc-improve-ref" class="form-control" placeholder="personal#9 hoặc company#1">
+                                <small>Format: <b>personal#&lt;id&gt;</b> hoặc <b>company#&lt;id&gt;</b></small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="doc-improve-goal"><i class="fas fa-bullseye"></i> Goal</label>
+                                <input type="text" id="doc-improve-goal" class="form-control" placeholder="policy (default)" value="policy">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="doc-improve-topk"><i class="fas fa-layer-group"></i> top_k</label>
+                                <input type="number" id="doc-improve-topk" class="form-control" min="1" max="10" value="3">
+                                <small>Số chunks truy xuất cho mỗi mục kiểm tra</small>
+                            </div>
+
+                            <button id="doc-improve-btn" class="btn btn-primary">
+                                <i class="fas fa-magic"></i> Analyze & Suggest
+                            </button>
+
+                            <div class="form-group" style="margin-top: 16px;">
+                                <label><i class="fas fa-file-lines"></i> Report</label>
+                                <pre id="doc-improve-output" class="doc-improve-output">(Kết quả sẽ hiển thị ở đây)</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Documents Tab -->
+                <div class="tab-content" id="documents-tab">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-list"></i> Documents List</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="filter-section" style="margin-bottom: 12px;">
+                                <label for="documents-folder-filter"><i class="fas fa-filter"></i> Filter by Folder:</label>
+                                <select id="documents-folder-filter" class="form-select">
+                                    <option value="">All Folders</option>
+                                </select>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Filename</th>
+                                            <th>Folder</th>
+                                            <th>Size</th>
+                                            <th>Upload Date</th>
+                                            <th class="actions-col">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="documents-table-body">
+                                        <tr>
+                                            <td colspan="6" class="text-center">Loading...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reports Page -->
+            <div class="page" id="reports-page">
+                <div class="page-header">
+                    <h2>Report Management</h2>
+                    <p class="page-subtitle">Review and manage user reports</p>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon orange">
+                            <i class="fas fa-flag"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-label">Total Reports</div>
+                            <div class="stat-value" id="rep-total-reports">0</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon red">
+                            <i class="fas fa-exclamation-circle"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-label">Pending</div>
+                            <div class="stat-value" id="rep-pending-reports">0</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon green">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-label">Resolved</div>
+                            <div class="stat-value" id="rep-resolved-reports">0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <div class="filter-section">
+                            <label><i class="fas fa-filter"></i> Filter by Status:</label>
+                            <select id="report-filter" class="form-select">
+                                <option value="all">All Reports</option>
+                                <option value="pending">Pending</option>
+                                <option value="resolved">Resolved</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-list"></i> Reports List</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Issue</th>
+                                        <th>Description</th>
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                        <th class="actions-col">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="reports-table-body">
+                                    <tr>
+                                        <td colspan="6" class="text-center">Loading...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+<!-- Configuration Page -->
+<div class="page" id="configuration-page">
+    <div class="page-header">
+        <h2>System Configuration</h2>
+        <p class="page-subtitle">Manage LLM providers, API keys, and system settings</p>
+    </div>
+
+    <!-- Quick Model Switch -->
+    <div class="card config-card">
+        <div class="card-header">
+            <h3><i class="fas fa-exchange-alt"></i> Quick Model Switch</h3>
+        </div>
+        <div class="card-body">
+            <div class="config-row">
+                <div class="config-label">
+                    <strong>Use Gemini</strong>
+                    <p class="config-hint">Toggle to quickly switch between GitHub Models and Gemini</p>
+                </div>
+                <div class="config-control">
+                    <label class="switch">
+                        <input type="checkbox" id="config-use-gemini">
+                        <span class="slider round"></span>
+                    </label>
+                    <span class="switch-label" id="switch-label-gemini">OFF</span>
+                </div>
+            </div>
+            <div class="config-status" id="current-provider-status">
+                <i class="fas fa-info-circle"></i> Current provider: <strong
+                    id="current-provider-name">Loading...</strong>
+            </div>
+        </div>
+    </div>
+
+    <!-- LLM Provider Settings -->
+    <div class="card config-card">
+        <div class="card-header">
+            <h3><i class="fas fa-robot"></i> LLM Provider Settings</h3>
+        </div>
+        <div class="card-body">
+            <div class="form-group">
+                <label for="config-llm-provider">LLM Provider</label>
+                <select id="config-llm-provider" class="form-control">
+                    <option value="github">GitHub Models</option>
+                    <option value="gemini">Google Gemini</option>
+                    <option value="ollama">Ollama (Local)</option>
+                    <option value="openrouter">OpenRouter</option>
+                </select>
+            </div>
+
+            <!-- GitHub Models Config -->
+            <div class="provider-config" id="github-config">
+                <h4><i class="fab fa-github"></i> GitHub Models Configuration</h4>
+                <div class="form-group">
+                    <label for="config-github-token">GitHub Token</label>
+                    <div class="input-with-toggle">
+                        <input type="password" id="config-github-token" class="form-control" placeholder="ghp_...">
+                        <button type="button" class="btn-toggle-password"
+                            onclick="togglePassword('config-github-token')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="config-github-model">Model</label>
+                    <select id="config-github-model" class="form-control">
+                        <option value="openai/gpt-4.1">GPT-4.1</option>
+                        <option value="openai/gpt-4o">GPT-4o</option>
+                        <option value="openai/gpt-4o-mini">GPT-4o Mini</option>
+                        <option value="meta/llama-3.3-70b-instruct">Llama 3.3 70B</option>
+                        <option value="mistral-ai/mistral-large-2411">Mistral Large</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="config-github-endpoint">Endpoint</label>
+                    <input type="text" id="config-github-endpoint" class="form-control"
+                        value="https://models.github.ai/inference">
+                </div>
+                <button type="button" class="btn btn-secondary btn-sm" onclick="testLLMConnection()">
+                    <i class="fas fa-plug"></i> Test Connection
+                </button>
+            </div>
+
+            <!-- Gemini Config -->
+            <div class="provider-config" id="gemini-config" style="display: none;">
+                <h4><i class="fas fa-gem"></i> Google Gemini Configuration</h4>
+                <div class="form-group">
+                    <label for="config-gemini-key">API Key</label>
+                    <div class="input-with-toggle">
+                        <input type="password" id="config-gemini-key" class="form-control" placeholder="AIza...">
+                        <button type="button" class="btn-toggle-password" onclick="togglePassword('config-gemini-key')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="config-gemini-model">Model</label>
+                    <select id="config-gemini-model" class="form-control">
+                        <option value="gemini-2.5-flash">Gemini 2.5 Flash</option>
+                        <option value="gemini-2.0-flash">Gemini 2.0 Flash</option>
+                        <option value="gemini-1.5-pro">Gemini 1.5 Pro</option>
+                        <option value="gemini-1.5-flash">Gemini 1.5 Flash</option>
+                        <option value="gemini-3-27b-it">Gemini 3 27B IT</option>
+                    </select>
+                </div>
+                <button type="button" class="btn btn-secondary btn-sm" onclick="testLLMConnection()">
+                    <i class="fas fa-plug"></i> Test Connection
+                </button>
+            </div>
+
+            <!-- Ollama Config -->
+            <div class="provider-config" id="ollama-config" style="display: none;">
+                <h4><i class="fas fa-server"></i> Ollama Configuration</h4>
+                <div class="form-group">
+                    <label for="config-ollama-host">Host</label>
+                    <input type="text" id="config-ollama-host" class="form-control" value="http://localhost:11434">
+                </div>
+                <div class="form-group">
+                    <label for="config-ollama-model">Model</label>
+                    <input type="text" id="config-ollama-model" class="form-control" placeholder="qwen3:0.6b">
+                </div>
+            </div>
+
+            <!-- OpenRouter Config -->
+            <div class="provider-config" id="openrouter-config" style="display: none;">
+                <h4><i class="fas fa-route"></i> OpenRouter Configuration</h4>
+                <div class="form-group">
+                    <label for="config-openrouter-key">API Key</label>
+                    <div class="input-with-toggle">
+                        <input type="password" id="config-openrouter-key" class="form-control" placeholder="sk-or-...">
+                        <button type="button" class="btn-toggle-password"
+                            onclick="togglePassword('config-openrouter-key')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="config-openrouter-model">Model</label>
+                    <input type="text" id="config-openrouter-model" class="form-control"
+                        placeholder="qwen/qwen3-4b:free">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Performance Tuning -->
+    <div class="card config-card">
+        <div class="card-header">
+            <h3><i class="fas fa-tachometer-alt"></i> Performance Tuning</h3>
+        </div>
+        <div class="card-body">
+            <div class="config-grid">
+                <div class="form-group">
+                    <label for="config-temperature">Temperature</label>
+                    <input type="number" id="config-temperature" class="form-control" value="0.1" min="0" max="2"
+                        step="0.1">
+                    <small class="form-hint">Lower = more focused, Higher = more creative</small>
+                </div>
+                <div class="form-group">
+                    <label for="config-max-tokens">Max Tokens</label>
+                    <input type="number" id="config-max-tokens" class="form-control" value="1000" min="100" max="8000">
+                    <small class="form-hint">Maximum response length</small>
+                </div>
+                <div class="form-group">
+                    <label for="config-chunk-size">Chunk Size</label>
+                    <input type="number" id="config-chunk-size" class="form-control" value="600" min="200" max="2000">
+                    <small class="form-hint">Document chunk size for indexing</small>
+                </div>
+                <div class="form-group">
+                    <label for="config-chunk-overlap">Chunk Overlap</label>
+                    <input type="number" id="config-chunk-overlap" class="form-control" value="50" min="0" max="500">
+                    <small class="form-hint">Overlap between chunks</small>
+                </div>
+                <div class="form-group">
+                    <label for="config-similarity-top-k">Similarity Top K</label>
+                    <input type="number" id="config-similarity-top-k" class="form-control" value="3" min="1" max="20">
+                    <small class="form-hint">Number of context chunks retrieved</small>
+                </div>
+                <div class="form-group">
+                    <label for="config-chat-history-limit">Chat History Limit</label>
+                    <input type="number" id="config-chat-history-limit" class="form-control" value="4" min="1" max="20">
+                    <small class="form-hint">Recent Q&A pairs in context</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Settings -->
+    <div class="card config-card">
+        <div class="card-header">
+            <h3><i class="fas fa-sliders-h"></i> Application Settings</h3>
+        </div>
+        <div class="card-body">
+            <div class="config-row">
+                <div class="config-label">
+                    <strong>Debug Mode</strong>
+                    <p class="config-hint">Enable detailed logging (not recommended for production)</p>
+                </div>
+                <div class="config-control">
+                    <label class="switch">
+                        <input type="checkbox" id="config-debug">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="config-log-level">Log Level</label>
+                <select id="config-log-level" class="form-control">
+                    <option value="DEBUG">DEBUG</option>
+                    <option value="INFO">INFO</option>
+                    <option value="WARNING">WARNING</option>
+                    <option value="ERROR">ERROR</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Save Button -->
+    <div class="config-actions">
+        <button class="btn btn-secondary" onclick="loadConfiguration()">
+            <i class="fas fa-undo"></i> Reset
+        </button>
+        <button class="btn btn-primary" onclick="saveConfiguration()">
+            <i class="fas fa-save"></i> Save Configuration
+        </button>
+        <button class="btn btn-warning" onclick="restartServer()">
+            <i class="fas fa-sync"></i> Apply & Restart
+        </button>
+    </div>
+
+    <div class="config-note">
+        <i class="fas fa-exclamation-triangle"></i>
+        <span>Note: Some changes require server restart to take effect. Click "Apply & Restart" after saving.</span>
+    </div>
+</div>
+        </div>
+    </div>
+
+    <!-- Report Detail Modal -->
+    <div class="modal" id="report-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-info-circle"></i> Report Details</h3>
+                <button class="modal-close" onclick="state.closeModal('report-modal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="report-detail-body"></div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="state.closeModal('report-modal')">Close</button>
+                <button class="btn btn-success" id="resolve-btn" onclick="resolveReport()">
+                    <i class="fas fa-check"></i> Mark as Resolved
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal" id="delete-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-exclamation-triangle"></i> Confirm Delete</h3>
+                <button class="modal-close" onclick="state.closeModal('delete-modal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this document?</p>
+                <p class="text-warning"><strong id="delete-doc-name"></strong></p>
+                <p class="text-muted">This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="state.closeModal('delete-modal')">Cancel</button>
+                <button class="btn btn-danger" onclick="deleteDocument()">
+                    <i class="fas fa-trash"></i> Delete
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Folder Confirmation Modal -->
+    <div class="modal" id="delete-folder-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-folder-minus"></i> Delete Folder</h3>
+                <button class="modal-close" onclick="state.closeModal('delete-folder-modal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this folder?</p>
+                <p class="text-warning"><strong id="delete-folder-name"></strong></p>
+                <p class="text-muted">Documents in this folder will be moved to "Chung" (default folder).</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="state.closeModal('delete-folder-modal')">Cancel</button>
+                <button class="btn btn-danger" onclick="deleteFolder()">
+                    <i class="fas fa-trash"></i> Delete Folder
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rename Folder Modal -->
+    <div class="modal" id="rename-folder-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-edit"></i> Rename Folder</h3>
+                <button class="modal-close" onclick="state.closeModal('rename-folder-modal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="rename-folder-old-name">Current Name</label>
+                    <input type="text" id="rename-folder-old-name" class="form-control" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="rename-folder-new-name">New Name</label>
+                    <input type="text" id="rename-folder-new-name" class="form-control" placeholder="Enter new folder name...">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="state.closeModal('rename-folder-modal')">Cancel</button>
+                <button class="btn btn-primary" onclick="renameFolder()">
+                    <i class="fas fa-save"></i> Save
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rename Document Modal -->
+    <div class="modal" id="rename-document-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-edit"></i> Rename Document</h3>
+                <button class="modal-close" onclick="state.closeModal('rename-document-modal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="rename-doc-old-name">Current Name</label>
+                    <input type="text" id="rename-doc-old-name" class="form-control" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="rename-doc-new-name">New Name</label>
+                    <input type="text" id="rename-doc-new-name" class="form-control"
+                        placeholder="Enter new document name...">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="state.closeModal('rename-document-modal')">Cancel</button>
+                <button class="btn btn-primary" onclick="renameDocument()">
+                    <i class="fas fa-save"></i> Save
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <script type="module" src="src/admin/main.js?v=3.2"></script>
+</body>
+
+</html>

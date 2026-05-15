@@ -1,0 +1,46 @@
+services:
+  admin-web:
+    # Only reachable via the reverse proxy in HTTPS mode.
+    ports: []
+    environment:
+      - BEHIND_PROXY=1
+      - ADMIN_DOMAIN=${ADMIN_DOMAIN}
+      - USER_DOMAIN=${USER_DOMAIN}
+
+  user-web:
+    # Only reachable via the reverse proxy in HTTPS mode.
+    ports: []
+    environment:
+      - BEHIND_PROXY=1
+      - ADMIN_DOMAIN=${ADMIN_DOMAIN}
+      - USER_DOMAIN=${USER_DOMAIN}
+
+  caddy:
+    image: caddy:2
+    container_name: knowledge-proxy
+    restart: unless-stopped
+    depends_on:
+      - admin-web
+      - user-web
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    environment:
+      # Required for automatic HTTPS.
+      - CADDY_EMAIL=${CADDY_EMAIL}
+      - ADMIN_DOMAIN=${ADMIN_DOMAIN}
+      - USER_DOMAIN=${USER_DOMAIN}
+    networks:
+      - app-network
+
+volumes:
+  caddy_data:
+  caddy_config:
+
+networks:
+  app-network:
+    external: false

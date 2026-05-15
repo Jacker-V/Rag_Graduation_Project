@@ -1,0 +1,147 @@
+================================================================================
+        HƯỚNG DẪN KIỂM TRA LỖ HỔNG BẢO MẬT ỨNG DỤNG WEB
+                    Tài liệu nội bộ - Security Team
+================================================================================
+
+1. GIỚI THIỆU
+-------------
+Tài liệu này hướng dẫn quy trình kiểm tra lỗ hổng bảo mật (Penetration Testing)
+cho các ứng dụng web nội bộ của công ty. Áp dụng theo tiêu chuẩn OWASP Top 10.
+
+================================================================================
+
+2. OWASP TOP 10 - 2024
+----------------------
+
+2.1. A01: Broken Access Control
+   - Kiểm tra: Thay đổi URL/parameter để truy cập tài nguyên không được phép
+   - Tool: Burp Suite, OWASP ZAP
+   - Ví dụ: /user/123 → /user/124 (IDOR vulnerability)
+
+2.2. A02: Cryptographic Failures
+   - Kiểm tra: Dữ liệu nhạy cảm có được mã hóa không
+   - Lưu ý: Password phải hash bằng bcrypt/argon2, không MD5/SHA1
+   - Kiểm tra HTTPS, certificate validity
+
+2.3. A03: Injection
+   - SQL Injection: ' OR '1'='1' --
+   - Command Injection: ; ls -la
+   - XSS: <script>alert('XSS')</script>
+   - Tool: sqlmap, XSStrike
+
+2.4. A04: Insecure Design
+   - Review threat model
+   - Kiểm tra business logic flaws
+   - Rate limiting có được implement không
+
+2.5. A05: Security Misconfiguration
+   - Default credentials
+   - Unnecessary features enabled
+   - Error messages lộ thông tin nhạy cảm
+   - Directory listing enabled
+
+2.6. A06: Vulnerable Components
+   - Kiểm tra version của libraries/frameworks
+   - Tool: OWASP Dependency Check, Snyk
+   - Scan CVE database
+
+2.7. A07: Authentication Failures
+   - Brute force protection
+   - Session management
+   - Password policy
+   - MFA implementation
+
+2.8. A08: Software and Data Integrity Failures
+   - Kiểm tra CI/CD pipeline security
+   - Verify software updates
+   - Deserialization vulnerabilities
+
+2.9. A09: Security Logging and Monitoring
+   - Logs có đủ thông tin không
+   - Có alert system không
+   - Log injection vulnerability
+
+2.10. A10: Server-Side Request Forgery (SSRF)
+   - Kiểm tra các endpoint fetch external URLs
+   - Internal network access
+   - Cloud metadata endpoints
+
+================================================================================
+
+3. QUY TRÌNH KIỂM TRA
+---------------------
+
+Bước 1: Thu thập thông tin (Reconnaissance)
+   - Subdomain enumeration
+   - Technology fingerprinting
+   - Endpoint discovery
+
+Bước 2: Scanning
+   - Port scanning (nmap)
+   - Vulnerability scanning (Nessus, OpenVAS)
+   - Web application scanning (Burp Suite, OWASP ZAP)
+
+Bước 3: Exploitation
+   - Thử khai thác các lỗ hổng tìm được
+   - Document proof of concept
+   - Đánh giá mức độ nghiêm trọng (CVSS)
+
+Bước 4: Báo cáo
+   - Mô tả chi tiết lỗ hổng
+   - Steps to reproduce
+   - Đề xuất cách khắc phục
+   - Timeline remediation
+
+================================================================================
+
+4. CÔNG CỤ THƯỜNG DÙNG
+----------------------
+
+4.1. Proxy Tools:
+   - Burp Suite Professional
+   - OWASP ZAP
+   - mitmproxy
+
+4.2. Scanning Tools:
+   - Nmap
+   - Nikto
+   - WPScan (WordPress)
+   - nuclei
+
+4.3. Exploitation:
+   - Metasploit
+   - sqlmap
+   - XSStrike
+   - ffuf (fuzzing)
+
+4.4. Reporting:
+   - Dradis Framework
+   - Faraday
+   - Custom templates
+
+================================================================================
+
+5. CHECKLIST NHANH
+------------------
+
+[ ] Authentication & Session Management
+[ ] Access Control
+[ ] Input Validation
+[ ] Output Encoding
+[ ] Cryptography
+[ ] Error Handling
+[ ] Logging & Monitoring
+[ ] File Upload Security
+[ ] API Security
+[ ] Third-party Components
+
+================================================================================
+
+6. LIÊN HỆ
+----------
+Security Team Lead: security@company.com
+Hotline báo cáo incident: ext. 1337
+
+================================================================================
+                        Cập nhật: 11/2025
+================================================================================

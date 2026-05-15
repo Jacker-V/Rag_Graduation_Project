@@ -1,0 +1,230 @@
+================================================================================
+                    BÁO CÁO CHI TIẾT PHẦN VIỆC CỦA HUY
+              LLM Integration, Tin tức & Triển khai
+================================================================================
+
+I. TỔNG QUAN VAI TRÒ
+--------------------
+Huy chịu trách nhiệm tích hợp các LLM providers (Gemini, OpenRouter, Ollama),
+phát triển tính năng tin tức kỹ thuật, và triển khai hệ thống lên môi trường
+production.
+
+================================================================================
+
+II. CÁC ĐẦU VIỆC CHI TIẾT
+-------------------------
+
+1. TÍCH HỢP LLM PROVIDERS (rag_chatbot/core/model/)
+---------------------------------------------------
+   File chính: model.py
+
+   a) Thiết kế Model Wrapper:
+      - Tạo lớp trừu tượng (abstract) cho LLM
+      - Cùng interface cho mọi provider
+      - Dễ dàng chuyển đổi giữa các provider
+
+   b) Tích hợp Gemini (Google):
+      - Sử dụng Google Generative AI SDK
+      - Cấu hình API key qua biến môi trường GOOGLE_API_KEY
+      - Xử lý rate limit và quota
+
+   c) Tích hợp OpenRouter:
+      - Trung gian gọi nhiều model (GPT-4, Claude, Llama, v.v.)
+      - Cấu hình OPENROUTER_API_KEY
+      - Linh hoạt chọn model theo yêu cầu
+
+   d) Tích hợp Ollama (Local LLM):
+      - Chạy model offline trên máy
+      - Bảo mật cao (không gửi data ra ngoài)
+      - Phù hợp cho môi trường doanh nghiệp yêu cầu privacy
+
+   e) Xử lý biến môi trường:
+      - Load từ file .env
+      - Fallback khi thiếu config
+      - Validate API keys khi khởi động
+
+2. PHÁT TRIỂN TÍNH NĂNG TIN TỨC KỸ THUẬT
+-----------------------------------------
+   File chính: rag_chatbot/workers/news_fetcher.py
+
+   a) Crawl tin tức từ nguồn:
+      - RSS feeds từ các trang tech (VnExpress Tech, TechCrunch, v.v.)
+      - Parse HTML để lấy nội dung bài viết
+      - Xử lý encoding và ký tự đặc biệt
+
+   b) Lưu trữ tin tức:
+      - Cache tin đã crawl
+      - Lọc tin trùng lặp
+      - Cập nhật định kỳ
+
+   c) Tóm tắt bài viết:
+      - Endpoint /api/news/summarize
+      - Dùng LLM để tóm tắt nội dung dài
+      - Giữ các điểm chính, loại bỏ chi tiết thừa
+
+   d) Giải thích thuật ngữ:
+      - Endpoint /api/news/explain
+      - Người dùng highlight thuật ngữ → LLM giải thích
+      - Giải thích trong ngữ cảnh bài viết
+
+   e) Debug các lỗi phức tạp:
+      - RSS snippet bị cắt ngắn
+      - Placeholder content từ trang lazy-load
+      - LLM provider mismatch khi tóm tắt
+
+3. TRIỂN KHAI & MÔI TRƯỜNG (DevOps)
+------------------------------------
+
+   a) Docker Configuration:
+      - File: Dockerfile
+        + Base image: Python 3.10
+        + Install dependencies
+        + Copy source code
+        + Expose ports 7860, 7861
+      
+      - File: docker-compose.yml
+        + Service cho admin web
+        + Service cho user web
+        + Volume mount cho data persistence
+        + Network configuration
+
+   b) Makefile:
+      - make build: Build Docker images
+      - make run: Chạy containers
+      - make stop: Dừng containers
+      - make logs: Xem logs
+      - make clean: Xóa containers và images
+
+   c) Triển khai lên Server:
+      - Cấu hình cho AWS/Cloud server
+      - Setup reverse proxy (nginx nếu cần)
+      - SSL/HTTPS configuration
+      - Tối ưu hóa hiệu năng
+
+   d) Scripts hỗ trợ:
+      - scripts/install.sh: Cài đặt dependencies
+      - scripts/install_extra.sh: Cài thêm packages
+      - scripts/run.sh: Chạy ứng dụng
+
+================================================================================
+
+III. KỸ THUẬT ĐÃ ÁP DỤNG
+-------------------------
+
+1. LLM Provider Abstraction:
+   - Pattern: Wrapper/Adapter
+   - Lợi ích: Đổi provider không cần sửa code business logic
+   - Cấu hình qua environment variables
+
+2. Async HTTP Requests:
+   - Crawl tin tức không blocking
+   - Timeout handling
+   - Retry mechanism khi thất bại
+
+3. Containerization:
+   - Đóng gói toàn bộ ứng dụng vào Docker
+   - Reproducible environment
+   - Dễ deploy lên bất kỳ server nào
+
+4. Environment Variables:
+   - GOOGLE_API_KEY: API key cho Gemini
+   - OPENROUTER_API_KEY: API key cho OpenRouter
+   - OLLAMA_HOST: URL của Ollama server
+   - MODEL_PROVIDER: Chọn provider (gemini/openrouter/ollama)
+
+================================================================================
+
+IV. LUỒNG XỬ LÝ TIN TỨC
+------------------------
+
+1. CRAWL:
+   RSS Feed → HTTP Request → Parse XML → Extract Article URLs
+
+2. PARSE:
+   Article URL → HTTP Request → Parse HTML → Extract Content → Clean Text
+
+3. TÓM TẮT:
+   Full Content → Send to LLM → Prompt: "Tóm tắt bài viết sau..." → Summary
+
+4. GIẢI THÍCH:
+   Term + Context → Send to LLM → Prompt: "Giải thích thuật ngữ..." → Explanation
+
+================================================================================
+
+V. FILES CHỊU TRÁCH NHIỆM
+--------------------------
+
+LLM Integration:
+└── rag_chatbot/core/model/
+    ├── __init__.py
+    └── model.py              # Wrapper cho Gemini, OpenRouter, Ollama
+
+News Feature:
+└── rag_chatbot/workers/
+    └── news_fetcher.py       # Crawl và xử lý tin tức
+
+Endpoints (trong run_user_web.py do Nam code, Huy bổ sung logic):
+    - /api/news
+    - /api/news/summarize
+    - /api/news/explain
+
+Deployment:
+├── Dockerfile                # Docker image configuration
+├── docker-compose.yml        # Multi-container setup
+├── Makefile                  # Build và run commands
+└── scripts/
+    ├── install.sh
+    ├── install_extra.sh
+    └── run.sh
+
+================================================================================
+
+VI. ĐÓNG GÓP QUAN TRỌNG
+------------------------
+
+1. Multi-provider LLM Support:
+   - Không phụ thuộc vào một nhà cung cấp
+   - Có thể dùng Ollama để bảo mật data nội bộ
+   - Linh hoạt chọn model theo chi phí/chất lượng
+
+2. Tin tức kỹ thuật:
+   - Giá trị gia tăng cho người dùng
+   - Kết hợp RAG với thông tin real-time
+   - Giúp người dùng hiểu tin tức phức tạp
+
+3. Production-ready Deployment:
+   - Docker hoá toàn bộ ứng dụng
+   - Dễ scale và maintain
+   - Tái tạo môi trường nhất quán
+
+================================================================================
+
+VII. THÁCH THỨC ĐÃ GIẢI QUYẾT
+------------------------------
+
+1. Rate Limiting từ LLM providers:
+   - Implement retry với exponential backoff
+   - Fallback sang provider khác khi cần
+
+2. Crawl tin tức bị block:
+   - Rotate User-Agent
+   - Xử lý JavaScript-rendered content
+
+3. Encoding issues:
+   - Detect và convert encoding
+   - Handle UTF-8, ISO-8859-1, etc.
+
+4. Docker networking:
+   - Container-to-container communication
+   - Port mapping và expose đúng cách
+
+================================================================================
+
+VIII. KẾT LUẬN
+--------------
+Phần việc của Huy đảm bảo hệ thống có thể sử dụng nhiều LLM linh hoạt, cung cấp
+tính năng tin tức giá trị, và sẵn sàng triển khai lên production. Thiết kế 
+multi-provider cho phép doanh nghiệp chọn giải pháp phù hợp với yêu cầu bảo mật
+và chi phí của họ.
+
+================================================================================

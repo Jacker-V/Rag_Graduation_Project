@@ -1,0 +1,190 @@
+================================================================================
+            QUY TRÌNH XỬ LÝ SỰ CỐ BẢO MẬT (INCIDENT RESPONSE)
+                    Tài liệu nội bộ - Security Operations
+================================================================================
+
+1. MỤC ĐÍCH
+-----------
+Tài liệu này quy định quy trình xử lý khi xảy ra sự cố bảo mật trong hệ thống
+của công ty, đảm bảo phản ứng nhanh chóng và giảm thiểu thiệt hại.
+
+================================================================================
+
+2. PHÂN LOẠI SỰ CỐ
+------------------
+
+Mức độ 1 - CRITICAL (Nghiêm trọng):
+   - Ransomware attack
+   - Data breach (lộ dữ liệu khách hàng)
+   - Hệ thống production bị compromise
+   - Thời gian phản hồi: 15 phút
+
+Mức độ 2 - HIGH (Cao):
+   - Phát hiện malware trên server
+   - Unauthorized access vào hệ thống nội bộ
+   - DDoS attack
+   - Thời gian phản hồi: 1 giờ
+
+Mức độ 3 - MEDIUM (Trung bình):
+   - Phishing email nhắm vào nhân viên
+   - Suspicious login attempts
+   - Policy violations
+   - Thời gian phản hồi: 4 giờ
+
+Mức độ 4 - LOW (Thấp):
+   - Spam emails
+   - Minor policy violations
+   - False positive alerts
+   - Thời gian phản hồi: 24 giờ
+
+================================================================================
+
+3. QUY TRÌNH XỬ LÝ 6 BƯỚC
+-------------------------
+
+BƯỚC 1: PHÁT HIỆN & BÁO CÁO (Detection & Reporting)
+---------------------------------------------------
+   - Nguồn phát hiện: SIEM, IDS/IPS, User report, Threat intel
+   - Ghi nhận thông tin ban đầu:
+     + Thời gian phát hiện
+     + Nguồn phát hiện
+     + Hệ thống bị ảnh hưởng
+     + Mô tả sự cố
+   - Tạo ticket trong hệ thống quản lý incident
+
+BƯỚC 2: ĐÁNH GIÁ & PHÂN LOẠI (Assessment & Classification)
+----------------------------------------------------------
+   - Xác định scope của sự cố
+   - Phân loại mức độ nghiêm trọng
+   - Xác định team response phù hợp
+   - Thông báo các stakeholders liên quan
+
+BƯỚC 3: NGĂN CHẶN (Containment)
+-------------------------------
+   Ngắn hạn:
+   - Isolate affected systems
+   - Block malicious IPs/domains
+   - Disable compromised accounts
+   - Capture volatile evidence
+
+   Dài hạn:
+   - Apply temporary patches
+   - Strengthen access controls
+   - Update firewall rules
+   - Enable additional monitoring
+
+BƯỚC 4: LOẠI BỎ (Eradication)
+-----------------------------
+   - Remove malware/backdoors
+   - Patch vulnerabilities
+   - Reset compromised credentials
+   - Clean affected systems
+   - Verify removal successful
+
+BƯỚC 5: KHÔI PHỤC (Recovery)
+----------------------------
+   - Restore systems from clean backups
+   - Validate system integrity
+   - Monitor for re-infection
+   - Gradual return to production
+   - Verify business operations normal
+
+BƯỚC 6: BÀI HỌC KINH NGHIỆM (Lessons Learned)
+---------------------------------------------
+   - Post-incident review meeting
+   - Document timeline of events
+   - Identify gaps in detection/response
+   - Update playbooks and procedures
+   - Improve preventive controls
+   - Share lessons với team
+
+================================================================================
+
+4. THÔNG TIN LIÊN HỆ KHẨN CẤP
+-----------------------------
+
+Security Operations Center (SOC):
+   - Hotline: 1900-xxxx (24/7)
+   - Email: soc@company.com
+   - Slack: #security-incident
+
+Escalation Path:
+   Level 1: SOC Analyst → Response trong 15 phút
+   Level 2: Senior Analyst → Escalate sau 30 phút
+   Level 3: Security Manager → Escalate sau 1 giờ
+   Level 4: CISO/CTO → Critical incidents
+
+External Contacts:
+   - VNCERT: +84-24-xxxx-xxxx
+   - Forensics Vendor: forensics@vendor.com
+   - Legal Team: legal@company.com
+   - PR Team: pr@company.com (cho data breach)
+
+================================================================================
+
+5. EVIDENCE COLLECTION
+----------------------
+
+Digital Evidence cần thu thập:
+   - Memory dump (RAM)
+   - Disk images
+   - Network traffic logs
+   - System logs (Windows Event, syslog)
+   - Application logs
+   - Authentication logs
+   - Firewall/IDS logs
+
+Nguyên tắc Chain of Custody:
+   - Ghi nhận thời gian, người thu thập
+   - Hash verification (MD5, SHA256)
+   - Lưu trữ an toàn
+   - Document mọi access
+
+================================================================================
+
+6. COMMUNICATION TEMPLATES
+--------------------------
+
+6.1. Internal Notification:
+   Subject: [SECURITY INCIDENT] - [Severity] - [Brief Description]
+   
+   Thông tin sự cố:
+   - Incident ID: INC-2025-xxxx
+   - Thời gian phát hiện: DD/MM/YYYY HH:MM
+   - Mức độ: Critical/High/Medium/Low
+   - Hệ thống ảnh hưởng: [list]
+   - Status: Investigating/Contained/Resolved
+   - Action required: [actions]
+
+6.2. External Notification (nếu cần):
+   - Tuân thủ quy định PDPA/GDPR
+   - Thông báo trong 72 giờ với data breach
+   - Coordinate với Legal và PR team
+
+================================================================================
+
+7. PLAYBOOK THAM KHẢO
+---------------------
+
+- Ransomware Response Playbook
+- Phishing Response Playbook
+- Data Breach Response Playbook
+- DDoS Response Playbook
+- Insider Threat Response Playbook
+
+Truy cập: https://wiki.internal/security/playbooks
+
+================================================================================
+
+8. TRAINING & DRILLS
+--------------------
+
+- Tabletop exercises: Hàng quý
+- Technical drills: Hàng tháng
+- Full-scale simulation: Hàng năm
+- New member training: Trong 2 tuần đầu
+
+================================================================================
+                    Phiên bản: 2.1 | Cập nhật: 11/2025
+                    Phê duyệt: CISO - Nguyễn Văn A
+================================================================================

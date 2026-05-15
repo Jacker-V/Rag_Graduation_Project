@@ -1,0 +1,147 @@
+================================================================================
+                    BÁO CÁO CHI TIẾT PHẦN VIỆC CỦA HÀ
+              RAG Pipeline & Xử lý Tài liệu
+================================================================================
+
+I. TỔNG QUAN VAI TRÒ
+--------------------
+Hà chịu trách nhiệm thiết kế và xây dựng toàn bộ kiến trúc RAG Pipeline - 
+phần cốt lõi của hệ thống trợ lý tri thức. Đây là phần "não bộ" quyết định 
+chất lượng truy vấn và trả lời của chatbot.
+
+================================================================================
+
+II. CÁC ĐẦU VIỆC CHI TIẾT
+-------------------------
+
+1. THIẾT KẾ KIẾN TRÚC RAG (Retrieval-Augmented Generation)
+----------------------------------------------------------
+   Mục tiêu: Xây dựng pipeline từ tài liệu thô → vector → truy vấn → context
+
+   a) Module Ingestion (rag_chatbot/core/ingestion/)
+      - File: ingestion.py
+      - Chức năng:
+        + Đọc tài liệu từ nhiều định dạng: PDF, DOCX, TXT
+        + Chunking: Chia tài liệu thành các đoạn nhỏ có ngữ nghĩa
+        + Xử lý metadata: Lưu thông tin nguồn, trang, thời gian
+      - Kỹ thuật áp dụng:
+        + Recursive Character Text Splitter
+        + Overlap giữa các chunk để không mất ngữ cảnh
+        + Làm sạch text (loại bỏ ký tự đặc biệt, chuẩn hóa Unicode)
+
+   b) Module Embedding (rag_chatbot/core/embedding/)
+      - File: embedding.py  
+      - Chức năng:
+        + Chuyển đổi text chunk thành vector số
+        + Hỗ trợ nhiều model embedding
+      - Model sử dụng: sentence-transformers, OpenAI embeddings, hoặc local
+
+   c) Module Vector Store (rag_chatbot/core/vector_store/)
+      - File: vector_store.py
+      - Chức năng:
+        + Lưu trữ vector embeddings
+        + Index để tìm kiếm nhanh
+        + Hỗ trợ persist data ra file
+      - Công nghệ: ChromaDB hoặc FAISS
+
+   d) Module Engine & Retriever (rag_chatbot/core/engine/)
+      - File: engine.py, retriever.py
+      - Chức năng:
+        + Nhận câu hỏi người dùng
+        + Embed câu hỏi thành vector
+        + Tìm top-k chunk tương đồng nhất (similarity search)
+        + Trả về context phù hợp cho LLM
+
+2. THIẾT KẾ HỆ THỐNG PROMPT
+----------------------------
+   Nằm trong: rag_chatbot/core/prompt/
+
+   a) QA Prompt (qa_prompt.py)
+      - Prompt chính để LLM trả lời câu hỏi
+      - Thiết kế để:
+        + LLM chỉ trả lời dựa trên context được cung cấp
+        + Không bịa thông tin ngoài tài liệu
+        + Trả lời bằng tiếng Việt tự nhiên
+
+   b) Query Generation Prompt (query_gen_prompt.py)
+      - Sinh các câu truy vấn phụ từ câu hỏi gốc
+      - Mục đích: Mở rộng phạm vi tìm kiếm trong vector store
+
+   c) Selection Prompt (select_prompt.py)
+      - Chọn lọc context phù hợp nhất từ nhiều kết quả truy vấn
+      - Loại bỏ thông tin không liên quan trước khi đưa vào LLM
+
+3. XỬ LÝ ĐỊNH DẠNG TÀI LIỆU
+----------------------------
+   - PDF: Trích xuất text, xử lý table, hình ảnh (nếu có OCR)
+   - DOCX: Parse XML structure, giữ formatting cần thiết
+   - TXT: Đọc trực tiếp, xử lý encoding
+
+   Thách thức đã giải quyết:
+   - Tài liệu scan dạng hình ảnh
+   - Table phức tạp trong PDF
+   - Encoding tiếng Việt không chuẩn
+
+================================================================================
+
+III. LUỒNG HOẠT ĐỘNG CỦA RAG PIPELINE
+--------------------------------------
+
+1. GIAI ĐOẠN INGESTION (Khi upload tài liệu):
+   Tài liệu → Parse (PDF/DOCX/TXT) → Clean Text → Chunking → Embedding → Vector Store
+
+2. GIAI ĐOẠN RETRIEVAL (Khi người dùng hỏi):
+   Câu hỏi → Embedding → Similarity Search → Top-K Chunks → Context Selection
+
+3. GIAI ĐOẠN GENERATION (Sinh câu trả lời):
+   Context + Câu hỏi + Prompt → LLM → Câu trả lời
+
+================================================================================
+
+IV. ĐÓNG GÓP QUAN TRỌNG
+------------------------
+
+1. Thiết kế pipeline modular:
+   - Mỗi module độc lập, dễ thay thế
+   - Có thể đổi embedding model mà không ảnh hưởng retriever
+   - Có thể đổi vector store mà không ảnh hưởng ingestion
+
+2. Prompt engineering:
+   - Prompt được thiết kế kỹ để LLM trả lời chính xác
+   - Có cơ chế fallback khi không tìm thấy context phù hợp
+   - Hướng dẫn LLM trả lời "không biết" thay vì bịa
+
+3. Xử lý edge cases:
+   - Tài liệu rỗng hoặc quá ngắn
+   - Chunk overlap để không mất ngữ cảnh
+   - Handling lỗi khi parse file bị hỏng
+
+================================================================================
+
+V. FILES CHỊU TRÁCH NHIỆM
+--------------------------
+
+rag_chatbot/core/
+├── ingestion/
+│   └── ingestion.py          # Xử lý upload, parse, chunk tài liệu
+├── embedding/
+│   └── embedding.py          # Chuyển text thành vector
+├── vector_store/
+│   └── vector_store.py       # Lưu trữ và index vector
+├── engine/
+│   ├── engine.py             # Query engine chính
+│   └── retriever.py          # Truy vấn similarity search
+└── prompt/
+    ├── qa_prompt.py          # Prompt trả lời câu hỏi
+    ├── query_gen_prompt.py   # Prompt sinh query phụ
+    └── select_prompt.py      # Prompt chọn context
+
+================================================================================
+
+VI. KẾT LUẬN
+-------------
+Phần việc của Hà là nền tảng kỹ thuật quan trọng nhất của hệ thống. RAG Pipeline
+quyết định khả năng truy vấn chính xác và sinh câu trả lời chất lượng. Thiết kế 
+modular giúp hệ thống dễ mở rộng và bảo trì trong tương lai.
+
+================================================================================

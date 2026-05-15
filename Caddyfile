@@ -1,0 +1,11 @@
+{
+    email {$CADDY_EMAIL}
+}
+
+{$USER_DOMAIN} {
+    reverse_proxy user-web:7861
+}
+
+{$ADMIN_DOMAIN} {
+    reverse_proxy admin-web:7860
+}

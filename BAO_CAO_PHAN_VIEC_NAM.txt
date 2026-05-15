@@ -1,0 +1,226 @@
+================================================================================
+                    BÁO CÁO CHI TIẾT PHẦN VIỆC CỦA NAM
+              Backend & Frontend Admin/User
+================================================================================
+
+I. TỔNG QUAN VAI TRÒ
+--------------------
+Nam chịu trách nhiệm xây dựng toàn bộ Backend API và giao diện người dùng 
+(Admin + User). Đây là phần "mặt tiền" của hệ thống, nơi người dùng tương tác
+trực tiếp với trợ lý tri thức.
+
+================================================================================
+
+II. CÁC ĐẦU VIỆC CHI TIẾT
+-------------------------
+
+1. BACKEND API - ADMIN (run_admin_web.py)
+-----------------------------------------
+   Cổng: 7860
+   
+   Các endpoint đã xây dựng:
+
+   a) Authentication & Session:
+      - /api/login: Đăng nhập admin
+      - /api/logout: Đăng xuất
+      - Quản lý session bằng Flask-Session
+
+   b) Dashboard & Statistics:
+      - /api/stats: Lấy thống kê tổng quan
+        + Số lượng tài liệu
+        + Số người dùng
+        + Số câu hỏi đã trả lời
+        + Số báo cáo lỗi
+
+   c) Document Management:
+      - /api/documents: Danh sách tài liệu
+      - /api/documents/<id>: Chi tiết tài liệu
+      - /api/documents/delete: Xóa tài liệu
+      - /api/documents/upload: Upload tài liệu mới (từ admin)
+
+   d) User Management:
+      - /api/users: Danh sách người dùng
+      - /api/users/<id>/role: Thay đổi role
+      - /api/users/<id>/status: Kích hoạt/vô hiệu hóa
+
+   e) Reports Management:
+      - /api/reports: Danh sách báo cáo lỗi từ user
+      - /api/reports/<id>: Chi tiết báo cáo
+      - /api/reports/<id>/status: Đánh dấu đã xử lý
+
+2. BACKEND API - USER (run_user_web.py)
+---------------------------------------
+   Cổng: 7861
+
+   Các endpoint đã xây dựng:
+
+   a) Authentication:
+      - /api/login: Đăng nhập user
+      - /api/register: Đăng ký tài khoản mới
+      - /api/logout: Đăng xuất
+
+   b) Chat & RAG:
+      - /api/chat: Gửi câu hỏi và nhận câu trả lời
+        + Kết nối với RAG Pipeline
+        + Streaming response (SSE)
+      - /api/chat/history: Lịch sử chat
+
+   c) Document Upload (Personal):
+      - /api/upload: Upload tài liệu cá nhân
+      - /api/documents: Danh sách tài liệu của user
+      - /api/documents/delete: Xóa tài liệu
+
+   d) News (Tin tức kỹ thuật):
+      - /api/news: Lấy danh sách tin tức
+      - /api/news/summarize: Tóm tắt bài viết
+      - /api/news/explain: Giải thích thuật ngữ
+
+   e) Report Issues:
+      - /api/report: Gửi báo cáo lỗi/feedback
+        + Lưu câu hỏi, câu trả lời
+        + Lưu loại lỗi và comment của user
+
+3. FRONTEND ADMIN (UI/admin_*)
+------------------------------
+   Files:
+   - admin_index.html: Cấu trúc HTML
+   - UI/src/admin/main.js: Logic JavaScript (ES modules)
+   - admin_styles.css: Styling
+
+   Các trang đã xây dựng:
+
+   a) Dashboard:
+      - Hiển thị stats cards (tài liệu, users, questions, reports)
+      - Biểu đồ hoạt động (nếu có)
+
+   b) Documents Page:
+      - Bảng danh sách tài liệu
+      - Filter theo loại, ngày upload
+      - Nút xóa, xem chi tiết
+
+   c) Users Page:
+      - Bảng danh sách người dùng
+      - Dropdown đổi role
+      - Toggle trạng thái active
+
+   d) Reports Page:
+      - Bảng báo cáo lỗi từ user
+      - Modal xem chi tiết (câu hỏi, câu trả lời, comment)
+      - Nút đánh dấu đã xử lý
+
+   e) Settings Page:
+      - Cấu hình hệ thống
+      - Chọn LLM provider
+      - Cấu hình embedding model
+
+4. FRONTEND USER (UI/user_*)
+----------------------------
+   Files:
+   - user_index.html: Cấu trúc HTML
+   - UI/src/user/main.js: Logic JavaScript (ES modules)
+   - user_styles.css: Styling
+
+   Các tính năng đã xây dựng:
+
+   a) Chat Interface:
+      - Khung chat với input và nút gửi
+      - Hiển thị tin nhắn user/assistant
+      - Streaming response (hiện từng chữ)
+      - Nút Report trên mỗi câu trả lời AI
+
+   b) Document Upload:
+      - Drag & drop upload
+      - Progress bar
+      - Danh sách tài liệu đã upload
+
+   c) News Section:
+      - Grid tin tức công nghệ
+      - Modal đọc chi tiết
+      - Nút tóm tắt và giải thích
+
+   d) Report Modal:
+      - Form báo cáo lỗi
+      - Dropdown loại lỗi
+      - Textarea nhập comment
+
+================================================================================
+
+III. DATABASE SCHEMA
+---------------------
+SQLite database với các bảng:
+
+1. users:
+   - id, username, password_hash
+   - role (admin/user)
+   - created_at, is_active
+
+2. sessions:
+   - id, user_id
+   - token, expires_at
+
+3. documents:
+   - id, filename, filepath
+   - uploaded_by, uploaded_at
+   - status, file_type
+
+4. user_reports:
+   - id, user_id
+   - question, answer
+   - report_type, user_comment
+   - created_at, status
+
+================================================================================
+
+IV. TÍNH NĂNG KỸ THUẬT ĐÃ TRIỂN KHAI
+-------------------------------------
+
+1. Server-Sent Events (SSE):
+   - Streaming response cho chat
+   - Không cần refresh để nhận câu trả lời
+
+2. Session Management:
+   - Cookie-based authentication
+   - Auto logout khi hết hạn
+
+3. File Upload Handling:
+   - Validate file type và size
+   - Lưu file vào thư mục uploads/
+   - Trigger ingestion pipeline sau upload
+
+4. CORS Configuration:
+   - Cho phép cross-origin requests
+   - Phục vụ cả admin và user từ cùng backend
+
+5. Error Handling:
+   - Try-catch cho mọi API
+   - Trả về JSON error message chuẩn
+
+================================================================================
+
+V. FILES CHỊU TRÁCH NHIỆM
+--------------------------
+
+Backend:
+├── run_admin_web.py          # Flask server cho Admin (port 7860)
+└── run_user_web.py           # Flask server cho User (port 7861)
+
+Frontend Admin:
+├── UI/admin_index.html       # Cấu trúc HTML admin
+├── UI/src/admin/main.js      # JavaScript admin (ES modules)
+└── UI/admin_styles.css       # CSS admin
+
+Frontend User:
+├── UI/user_index.html        # Cấu trúc HTML user
+├── UI/src/user/main.js       # JavaScript user (ES modules)
+└── UI/user_styles.css        # CSS user
+
+================================================================================
+
+VI. KẾT LUẬN
+-------------
+Phần việc của Nam là "cầu nối" giữa người dùng và hệ thống RAG. Backend API 
+cung cấp các endpoint cho mọi thao tác, trong khi Frontend mang lại trải nghiệm
+sử dụng trực quan. Thiết kế tách biệt Admin và User giúp phân quyền rõ ràng và
+bảo mật hơn.
+
+================================================================================
